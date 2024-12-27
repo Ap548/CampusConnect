@@ -10,7 +10,7 @@
 
         <!--neu scroll insgesammt-->
         <div class="scroll-container-big">
-          <button class="scroll-button scroll-up" @click="scrollUp">↑</button>
+          <!--<button class="scroll-button scroll-up" @click="scrollUp">↑</button>-->
         
 
         <div class="Profilbild">
@@ -53,7 +53,7 @@
         </div>
 
         <!--scrollbar oben/unten-->
-        <button class="scroll-button scroll-down" @click="scrollDown">↓</button>
+       <!-- <button class="scroll-button scroll-down" @click="scrollDown">↓</button> -->
       </div>
 
       </div>
@@ -136,19 +136,19 @@ export default
       textarea.style.height = `${textarea.scrollHeight}px` // Passt die Höhe des Textfeldes an den Text an
     },
     scrollLeft(){
-      const container = this.$refs.scrollContent;
-      container.scrollBy({ left: -100, behavior: 'smooth' });
+      const container = this.$refs.scrollContent; // horizontales scrollen
+      container.scrollBy({ left: -100, behavior: 'smooth' }); //scroll Verhalten
     },
     scrollRight(){
       const container = this.$refs.scrollContent;
       container.scrollBy({ left: 100, behavior: 'smooth' });  
     },
     scrollUp(){
-      const container = this.$refs.scrollContent;
+      const container = this.$el.querySelector('.scroll-container-big'); // vertikales scrollen
       container.scrollBy({ top: -100, behavior: 'smooth' });
     },
     scrollDown(){
-      const container = this.$refs.scrollContent;
+      const container = this.$el.querySelector('.scroll-container-big');
       container.scrollBy({ top: 100, behavior: 'smooth' });  
     }
   },
@@ -360,29 +360,62 @@ size: 400px;
 /*Ende Blockiert*/ 
 
 .scroll-container-big{
+  max-width: 560px;
+  max-height: 620px;
+  overflow-y: auto;
   position: relative;
   border: 2px solid lightgray;
-  overflow: hidden;
-  width: calc(100% - 20px);
-  min-height: 100%;
-  margin: auto;
-  border-radius: 10px;
-  /*position: relative;
-  border: 2px solid lightgray;
-  overflow-x: auto; 
-  width: calc(100% - 20px);
-  min-height: 100%;
-  margin: auto;
-  border-radius: 10px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;*/
+  border-radius: 10px;
 }
-.scroll-up{
+/* Scroll-Pfeile oben und unten */
+.scroll-button.scroll-up{
+  position: sticky;
+  top: calc(2%);
+  right: 1px;
+  transform: translateX(500px);
+  z-index: 10;
+  border: 2px solid lightgray;
+  border-radius: 5px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.scroll-button.scroll-down{
+  position: sticky;
+  bottom: calc(2%);
+  right: 0;
+  transform: translateX(500px);
+  z-index: 10;
+  border: 2px solid lightgray;
+  border-radius: 5px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.scroll-container-big::-webkit-scrollbar{
+  width: 8px;
+}
+.scroll-container-big::-webkit-scrollbar-thumb{
+  background-color: gray;
+  border-radius: 4px;
+}
+.scroll-container::-webkit-scrollbar-thumb:hover{
+  background-color: darkgray;
+}
+/*.scroll-up{
   margin-bottom: auto;
 }
 .scroll-down{
   margin-top: auto;
-}
+}*/
 
 </style>

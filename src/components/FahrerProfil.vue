@@ -8,9 +8,9 @@
           <button class="Schließen" @click="ToggleFahrerProfil()">Schließen</button>
         </div>
 
-        <!--neu scroll insgesammt-->
+        <!--scroll insgesammt-->
         <div class="scroll-container-big">
-          <!--<button class="scroll-button scroll-up" @click="scrollUp">↑</button>-->
+          <button class="scroll-button scroll-up" @click="scrollUp">↑</button>
         
 
         <div class="Profilbild">
@@ -37,9 +37,6 @@
               <div class="item">6</div>
               <div class="item">7</div>
               <div class="item">8</div>
-              <!--<div class="item">9</div>
-              <div class="item">10</div>
-              <div class="item">11</div>-->
             </div>
             <!-- Pfeil rechts -->
             <button class="scroll-button right" @click="scrollRight">→</button>
@@ -47,13 +44,41 @@
         </div>
         <div class="Favoriten">
           <h2>Favoriten</h2>
+          <div class="scroll-container">
+            <!-- Pfeil links -->
+            <button class="scroll-button left" @click="scrollLeft2">←</button>
+            <!-- Scrollbarer Inhalt -->
+            <div class="scroll-content" ref="scrollContent2">
+              <!-- Beispiel-Inhalte -->
+              <div class="item">1</div>
+              <div class="item">2</div>
+              <div class="item">3</div>
+              <div class="item">4</div>
+            </div>
+            <!-- Pfeil rechts -->
+            <button class="scroll-button right" @click="scrollRight2">→</button>
+          </div>
         </div>
         <div class="Blockiert">
           <h2>Blockiert</h2>
+          <div class="scroll-container">
+            <!-- Pfeil links -->
+            <button class="scroll-button left" @click="scrollLeft3">←</button>
+            <!-- Scrollbarer Inhalt -->
+            <div class="scroll-content" ref="scrollContent3">
+              <!-- Beispiel-Inhalte -->
+              <div class="item">1</div>
+              <div class="item">2</div>
+              <div class="item">3</div>
+              <div class="item">4</div>
+            </div>
+            <!-- Pfeil rechts -->
+            <button class="scroll-button right" @click="scrollRight3">→</button>
+          </div>
         </div>
 
-        <!--scrollbar oben/unten-->
-       <!-- <button class="scroll-button scroll-down" @click="scrollDown">↓</button> -->
+        <!--scroll insgesammt-->
+        <button class="scroll-button scroll-down" @click="scrollDown">↓</button>
       </div>
 
       </div>
@@ -135,12 +160,31 @@ export default
       textarea.style.height = `auto`; // Setzt die Höhe wieder zurück
       textarea.style.height = `${textarea.scrollHeight}px` // Passt die Höhe des Textfeldes an den Text an
     },
+    //Fahrgemeinschaft
     scrollLeft(){
       const container = this.$refs.scrollContent; // horizontales scrollen
       container.scrollBy({ left: -100, behavior: 'smooth' }); //scroll Verhalten
     },
     scrollRight(){
       const container = this.$refs.scrollContent;
+      container.scrollBy({ left: 100, behavior: 'smooth' });  
+    },
+    //Favoriten
+    scrollLeft2(){
+      const container = this.$refs.scrollContent2; // horizontales scrollen
+      container.scrollBy({ left: -100, behavior: 'smooth' }); //scroll Verhalten
+    },
+    scrollRight2(){
+      const container = this.$refs.scrollContent2;
+      container.scrollBy({ left: 100, behavior: 'smooth' });  
+    },
+    //Blockiert
+    scrollLeft3(){
+      const container = this.$refs.scrollContent3; // horizontales scrollen
+      container.scrollBy({ left: -100, behavior: 'smooth' }); //scroll Verhalten
+    },
+    scrollRight3(){
+      const container = this.$refs.scrollContent3;
       container.scrollBy({ left: 100, behavior: 'smooth' });  
     },
     scrollUp(){

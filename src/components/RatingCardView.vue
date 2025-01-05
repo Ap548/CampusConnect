@@ -39,6 +39,7 @@ export default {
         return;
       }
       // Hier wird die Bewertung in die Datenbank gespeichert 
+      //TODO: Fahrten ID hinzufügen
       try {
         const { data, error } = await supabase.from('ratings').insert([
           {

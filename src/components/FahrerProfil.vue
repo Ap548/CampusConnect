@@ -3,8 +3,10 @@
       <div class="openFahrerProfil">
         <div class="header">
           <button @click="AllgemeineEinstellungen" class="leftAllgemeineEinstellungen">...</button>
-          <h1>Fahrer Profil</h1>
+          <h1>Profil</h1>
+
           <button @click="Bearbeiten" class="rightBearbeiten">Bearbeiten</button>
+
           <button class="Schließen" @click="ToggleFahrerProfil()">Schließen</button>
         </div>
 
@@ -129,7 +131,7 @@ export default
 
   data:()=>({
   name: `FahrerProfil`,
-  Profilbildlogo
+  Profilbildlogo,
   }),
   methods:
   {
@@ -139,9 +141,9 @@ export default
     AllgemeineEinstellungen(){
       console.log("Allgemeine Einstellungen aufgerufen");
     },
-    Bearbeiten(){
+    /*Bearbeiten(){
       console.log("Bearbeiten aufgerufen");
-    },
+    },*/
     /*Schließen(){
       this.closeFahrerprofil();
       console.log("Schließen aufgerufen");
@@ -254,15 +256,30 @@ export default
   font-size: 20px;
   margin-bottom: 10px;
 }
+.leftAllgemeineEinstellungen.active,
+.leftAllgemeineEinstellungen:hover{
+  background-color: lightgray;
+  border-radius: 5px;
+}
 .leftAllgemeineEinstellungen {
   position: absolute;
   left: 10px;
   top: 10px;
 }
+.rightBearbeiten.active,
+.rightBearbeiten:hover {
+  background-color: lightgray;
+  border-radius: 5px;
+}
 .rightBearbeiten {
   position: absolute;
   right: 10px;
   top: 10px;
+}
+.Schließen.active,
+.Schließen:hover{
+  background-color: lightgray;
+  border-radius: 5px;
 }
 .Schließen{
   position: absolute;
@@ -360,6 +377,10 @@ size: 400px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 /* Pfeile */
+.scroll-button.active,
+.scroll-button:hover{
+  background-color: lightgray;
+}
 .scroll-button {
   background: none;
   border: none;

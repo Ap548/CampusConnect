@@ -1,6 +1,7 @@
+
 <script>
 
-import { SessionManager } from '@/Clients/sessionManager'; //  Session-Handling
+import { SessionManager } from '@/Manager/sessionManager'; // Importiere Session-Handling
 
 
   export default {
@@ -11,16 +12,10 @@ import { SessionManager } from '@/Clients/sessionManager'; //  Session-Handling
       errorMessage: "", // Fehlermeldungen anzeigen
       }
     },
-
-   // Hier wird der Benutzername und das Passwort von der Registrierung übernommen
-   //ggf. abändern aus Sicherheitsgründen
-
     created() {
         this.email = this.$route.query.email || '';
         this.password = this.$route.query.password || '';
       },
-
-
     methods: {
 
       async loginUser() {
@@ -29,21 +24,21 @@ import { SessionManager } from '@/Clients/sessionManager'; //  Session-Handling
 
 
           if(error) {
-            this.errorMessage = "Login fehlgeschlagen: " + error.message;
+            this.errorMessage = "Email oder Passwort falsch.";
             return;
 
           }
           console.log("Login erfolgreich: ", data);
 
 
-          // Prüfen, ob die Session erfolgreich umgesetzt wurde
+          // Prüfen, ob die Session erfolgreich gesetzt wurde
         const session = await SessionManager.getCurrentSession();
         if (!session) {
           this.errorMessage = 'Sitzung konnte nicht gestartet werden.';
           return;
         }
 
-          //Nach erfolgreichem Login weiter zur Home-Ansicht, siehe ./router/index.js für Pfadnamen
+          //Nach erfolgreichem Login weiter zur Home-Ansicht -> ./router/index.js für weitere Pfadnamen
           this.$router.push({name: 'Fahrt'});
         } catch(err) {
           this.errorMessage = "Ein unerwarteter Fehler ist aufgetreten.";
@@ -68,7 +63,8 @@ margin-bottom: -100px;
 
   display: flex;
   justify-content: center;
-  margin:auto
+  margin:auto;
+
 }
 
 .container .icon {
@@ -76,6 +72,7 @@ margin-bottom: -100px;
  display: flex;
  margin: auto;
  justify-content: center;
+
 
 }
 
@@ -104,8 +101,17 @@ margin-bottom: -100px;
 
   justify-content: center;
   align-items: center;
+
+
   margin: auto;
   width: 500px;
+
+}
+
+.errorMsg{
+  display: flex;
+  justify-content: center ;
+  color: rgb(176, 0, 32);
 
 }
 
@@ -137,70 +143,73 @@ margin-bottom: -100px;
 }
 </style>
 
+
 <template>
-    <v-form @submit.prevent="loginUser">
-      <div class="icon">
-        <v-avatar
-          size="400"
-        >
-        <!-- Pfad zum Logo -->
-          <v-img
-            class="image"
-            alt="Logo"
-            src="../assets/CC_logo.png" 
+  <v-form @submit.prevent="loginUser">
+    <div class="icon">
+      <v-avatar
+        size="400"
+      >
+        <v-img
+          class="image"
+          alt="Logo"
+          src="../assets/CC_logo.png"
+        />
+      </v-avatar>
+    </div>
+    <div class="container">
+      <container>
+        <header class="header">
+          <h1>Willkommen zurück!</h1>
+
+          <h4>melde dich an und fahre los</h4>
+        </header>
+        <div class="textfield">
+          <v-text-field
+            id="email"
+            v-model="email"
+            label="Deine Email"
+
+            placeholder="Gebe deine Uni-Mail (uni-bayreuth/myubt.de) an."
+            variant="solo-filled"
+            rounded
+            prepend-inner-icon="mdi-email-outline"
           />
-        </v-avatar>
-      </div>
-      <div class="container">
-        <container>
-          <header class="header">
-            <h1>Willkommen zurück!</h1>
-  
-            <h4>melde dich an und fahre los</h4>
-          </header>
-          
-          <div class="textfield">
-            <v-text-field
-              id="email"
-              v-model="email"
-              label="Deine Email"
-              placeholder="Gebe deine Uni-Mail (uni-bayreuth/myubt.de) an."
-              variant="solo-filled"
-              rounded
-              prepend-inner-icon="mdi-email-outline"
-            />
-            <v-text-field
-              id="password"
-              v-model="password"
-              label="Passwort"
-              variant="solo-filled"
-              rounded
-              prepend-inner-icon="mdi-lock-outline"
-            />
-          </div>
-          <v-btn
-            class="button"
-            type="submit"
-            rounded="xl"
-            size="x-large"
-            @click="loginUser"
-          >
-            Einloggen
-          </v-btn>
-          <div class="question">
-          <!-- Link zur Registrierung -->
-            <p>
-              Du hast noch keinen einen Account?
-              <router-link
-                class="link"
-                :to="{name: 'Registrierung'}"
-                @click="gotToRegister"
-              >
-                Registrieren
-              </router-link>
-            </p>
-          </div>
-        </container>
-      </div>
-    </v-form>
-  </template>
+          <v-text-field
+            id="password"
+            v-model="password"
+            label="Passwort"
+            variant="solo-filled"
+            rounded
+            prepend-inner-icon="mdi-lock-outline"
+          />
+        </div>
+        <v-span class="errorMsg">
+          {{ errorMessage }}
+        </v-span>
+        <v-btn
+          class="button"
+          type="submit"
+          rounded="xl"
+          size="x-large"
+          @click="loginUser"
+        >
+          Einloggen
+        </v-btn>
+        <div class="question">
+          <p>
+            Du hast noch keinen einen Account?
+            <router-link
+              class="link"
+              :to="{name: 'Registrierung'}"
+              @click="gotToRegister"
+            >
+              Registrieren
+            </router-link>
+          </p>
+        </div>
+      </container>
+    </div>
+  </v-form>
+</template>
+

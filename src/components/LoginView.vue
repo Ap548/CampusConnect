@@ -1,5 +1,4 @@
 <script>
-//import { supabase } from '@/Clients/supabaseClient';
 
 import { SessionManager } from '@/Clients/sessionManager'; //  Session-Handling
 
@@ -14,6 +13,7 @@ import { SessionManager } from '@/Clients/sessionManager'; //  Session-Handling
     },
 
    // Hier wird der Benutzername und das Passwort von der Registrierung übernommen
+   //ggf. abändern aus Sicherheitsgründen
 
     created() {
         this.email = this.$route.query.email || '';
@@ -22,11 +22,6 @@ import { SessionManager } from '@/Clients/sessionManager'; //  Session-Handling
 
 
     methods: {
-
-    //nicht final, nur ein 'Platzhalter' für die Weiterleitung zur Bewertungskarte
-      goToRatingCard(){
-          this.$router.push({ name: 'Bewertung'})
-        },
 
       async loginUser() {
         try {
@@ -41,14 +36,14 @@ import { SessionManager } from '@/Clients/sessionManager'; //  Session-Handling
           console.log("Login erfolgreich: ", data);
 
 
-          // Prüfe, ob die Session erfolgreich gesetzt wurde
+          // Prüfen, ob die Session erfolgreich umgesetzt wurde
         const session = await SessionManager.getCurrentSession();
         if (!session) {
           this.errorMessage = 'Sitzung konnte nicht gestartet werden.';
           return;
         }
 
-          //Nach erfolgreichem Login weiter zur Home-Ansicht
+          //Nach erfolgreichem Login weiter zur Home-Ansicht, siehe ./router/index.js für Pfadnamen
           this.$router.push({name: 'Fahrt'});
         } catch(err) {
           this.errorMessage = "Ein unerwarteter Fehler ist aufgetreten.";

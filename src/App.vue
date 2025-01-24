@@ -1,8 +1,9 @@
+<script setup>
+
+</script>
+
 <template>
     <div>
-      <h1>Hello World</h1>
+    <router-view></router-view> 
     </div>
-      <div>
-      <h4>  hello hello hello </h4> 
-      </div>
 </template>

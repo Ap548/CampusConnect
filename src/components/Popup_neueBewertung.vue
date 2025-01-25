@@ -3,7 +3,7 @@
         <div class="popup-inner">
             <slot />
                 <div class="inhalt">
-                    Du kannst eine neue Fahrt akzeptieren 
+                    Du kannst deine letzte Fahrt bewerten   
                 </div>
 
 
@@ -18,12 +18,12 @@
 <template>
    <h1>Popup</h1>
     <button @click="() => TogglePopup('buttonTrigger')">Open Popup</button>  """Popup öffnen"""
-    <Popup_neueFahrt v-if="popupTriggers.buttonTrigger" :TogglePopup="() => TogglePopup('buttonTrigger')">
-    </Popup_neueFahrt>
+    <Popup_neueBewertung v-if="popupTriggers.buttonTrigger" :TogglePopup="() => TogglePopup('buttonTrigger')">
+    </Popup_neueBewertung>
  </template>
 
  <script>
-import Popup_neueFahrt from './components/Popup_neueFahrt.vue';
+import Popup_neueBewertung from './components/Popup_neueBewertung.vue';
 import {ref} from 'vue';
  
 export default {
@@ -37,14 +37,14 @@ export default {
     }
  
     return {
-      Popup_neueFahrt,
+      Popup_neueBewertung,
       popupTriggers,
       TogglePopup
     }
   },
  
   components: {
-    Popup_neueFahrt
+    Popup_neueBewertung
   },
 }
  

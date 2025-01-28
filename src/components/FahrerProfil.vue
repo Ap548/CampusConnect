@@ -97,7 +97,7 @@ setup () {
 
 
 <script>
-import Profilbildlogo from '@/assets/Profilbildlogo.png';
+import Profilbildlogo from '@/assets/CC_logo.png';
 export default 
 {
   props: ['ToggleFahrerProfil'],

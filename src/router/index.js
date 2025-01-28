@@ -10,7 +10,7 @@ import FahrerProfil from '@/components/FahrerProfil.vue'
 import LoginView from '@/components/LoginView.vue'
 import RegisterView from '@/components/RegisterView.vue'
 import BewertungView from '@/components/BewertungView.vue'
-import AddFahrtView from '@/components/AddFahrtView.vue'
+//import AddFahrtView from '@/components/AddFahrtView.vue'
 
 //import { components } from 'vuetify/dist/vuetify-labs.js'
 
@@ -45,11 +45,11 @@ const router = createRouter({
 
     },
 
-    {
+   /* {
         path:'/fahrt',
         name: 'Fahrt',
         component: AddFahrtView
-    },
+    },*/
 
      {
       path: '/profil',

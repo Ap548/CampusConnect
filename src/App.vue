@@ -1,9 +1,7 @@
-<script setup>
-
-</script>
-
 <template>
-    <div>
-    <router-view></router-view> 
-    </div>
+  <div>
+  <Suspense>
+  <router-view></router-view>
+  </Suspense>
+      </div>
 </template>

@@ -153,7 +153,7 @@ margin-bottom: -100px;
         <v-img
           class="image"
           alt="Logo"
-          src="../assets/CC_logo.png"
+          src="../assets/logo.png"
         />
       </v-avatar>
     </div>

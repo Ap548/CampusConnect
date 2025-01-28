@@ -1,0 +1,136 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "category": "uni",
+          "coordinates": [11.579589, 49.941243]
+        },
+        "properties": {
+          "name": "Universität Bayreuth"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "category": "uni",
+            "coordinates": [ 11.451001854688018,
+            50.1086989]
+        },
+        "properties": {
+            "name": "Campus Kulmbach"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "category": "Wohnheim",
+          "coordinates": [ 11.566191987375756,
+          49.93455265]
+        },
+        "properties": {
+          "name": "Studiocomfort"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "category": "Wohnheim",
+          "coordinates": [11.544842752885756,
+          49.94174725]
+        },
+        "properties": {
+          "name": "Studi am Roten Hügel"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "category": "Wohnheim",
+          "coordinates": [11.55496769409618,
+          49.9311856]
+        },
+        "properties": {
+          "name": "Studi Jakobsstraße"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "category": "Wohnheim",
+          "coordinates": [11.616358332825719,
+          49.9582973]
+        },
+        "properties": {
+          "name": "Studi Apart"
+        }
+      },{
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "category": "Wohnheim",
+          "coordinates": [11.5844945,
+          49.9333393]
+        },
+        "properties": {
+          "name": "Studi Storchennest"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "category": "Wohnheim",
+          "coordinates": [11.579680859060892,
+          49.94623665]
+        },
+        "properties": {
+          "name": "Uni Apart"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "category": "ÖV",
+          "coordinates": [11.5744666,
+          49.9460188]
+        },
+        "properties": {
+          "name": "ZOH"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "category": "ÖV",
+          "coordinates": [11.451983849198491,
+          50.109635850000004]
+        },
+        "properties": {
+          "name": "Bahnhof Kulmbach"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "category": "ÖV",
+          "coordinates": [11.5798173,
+          49.9498313]
+        },
+        "properties": {
+          "name": "Hauptbahnhof Bayreuth"
+        }
+      }
+    ]
+  }
+  

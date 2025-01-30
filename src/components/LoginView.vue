@@ -1,5 +1,78 @@
 
+
+
+<template>
+  <v-form @submit.prevent="loginUser">
+    <div class="icon">
+      <v-avatar
+        size="400"
+      >
+        <v-img
+          class="image"
+          alt="Logo"
+          src="../assets/CC_logo.png"
+        />
+      </v-avatar>
+    </div>
+    <div class="container">
+      <container>
+        <header class="header">
+          <h1>Willkommen zurück!</h1>
+
+          <h4>melde dich an und fahre los</h4>
+        </header>
+        <div class="textfield">
+          <v-text-field
+            id="email"
+            v-model="email"
+            label="Deine Email"
+
+            placeholder="Gebe deine Uni-Mail (uni-bayreuth/myubt.de) an."
+            variant="solo-filled"
+            rounded
+            prepend-inner-icon="mdi-email-outline"
+          />
+          <v-text-field
+            id="password"
+            v-model="password"
+            label="Passwort"
+            variant="solo-filled"
+            rounded
+            prepend-inner-icon="mdi-lock-outline"
+          />
+        </div>
+        <v-span class="errorMsg">
+          {{ errorMessage }}
+        </v-span>
+        <v-btn
+          class="button"
+          type="submit"
+          rounded="xl"
+          size="x-large"
+          @click="loginUser"
+        >
+          Einloggen
+        </v-btn>
+        <div class="question">
+          <p>
+            Du hast noch keinen einen Account?
+            <router-link
+              class="link"
+              :to="{name: 'Registrierung'}"
+              @click="gotToRegister"
+            >
+              Registrieren
+            </router-link>
+          </p>
+        </div>
+      </container>
+    </div>
+  </v-form>
+</template>
+
+
 <script>
+//import { supabase } from '@/Clients/supabaseClient';
 
 import { SessionManager } from '@/Manager/sessionManager'; // Importiere Session-Handling
 
@@ -18,6 +91,11 @@ import { SessionManager } from '@/Manager/sessionManager'; // Importiere Session
       },
     methods: {
 
+
+      goToRatingCard(){
+          this.$router.push({ name: 'Bewertung'})
+        },
+
       async loginUser() {
         try {
           const { data, error } = await SessionManager.signIn(this.email, this.password);
@@ -31,14 +109,14 @@ import { SessionManager } from '@/Manager/sessionManager'; // Importiere Session
           console.log("Login erfolgreich: ", data);
 
 
-          // Prüfen, ob die Session erfolgreich gesetzt wurde
+          // Prüfe, ob die Session erfolgreich gesetzt wurde
         const session = await SessionManager.getCurrentSession();
         if (!session) {
           this.errorMessage = 'Sitzung konnte nicht gestartet werden.';
           return;
         }
 
-          //Nach erfolgreichem Login weiter zur Home-Ansicht -> ./router/index.js für weitere Pfadnamen
+          //Nach erfolgreichem Login weiter zur Home-Ansicht
           this.$router.push({name: 'Fahrt'});
         } catch(err) {
           this.errorMessage = "Ein unerwarteter Fehler ist aufgetreten.";
@@ -142,74 +220,3 @@ margin-bottom: -100px;
   margin-left:3px ;
 }
 </style>
-
-
-<template>
-  <v-form @submit.prevent="loginUser">
-    <div class="icon">
-      <v-avatar
-        size="400"
-      >
-        <v-img
-          class="image"
-          alt="Logo"
-          src="../assets/logo.png"
-        />
-      </v-avatar>
-    </div>
-    <div class="container">
-      <container>
-        <header class="header">
-          <h1>Willkommen zurück!</h1>
-
-          <h4>melde dich an und fahre los</h4>
-        </header>
-        <div class="textfield">
-          <v-text-field
-            id="email"
-            v-model="email"
-            label="Deine Email"
-
-            placeholder="Gebe deine Uni-Mail (uni-bayreuth/myubt.de) an."
-            variant="solo-filled"
-            rounded
-            prepend-inner-icon="mdi-email-outline"
-          />
-          <v-text-field
-            id="password"
-            v-model="password"
-            label="Passwort"
-            variant="solo-filled"
-            rounded
-            prepend-inner-icon="mdi-lock-outline"
-          />
-        </div>
-        <v-span class="errorMsg">
-          {{ errorMessage }}
-        </v-span>
-        <v-btn
-          class="button"
-          type="submit"
-          rounded="xl"
-          size="x-large"
-          @click="loginUser"
-        >
-          Einloggen
-        </v-btn>
-        <div class="question">
-          <p>
-            Du hast noch keinen einen Account?
-            <router-link
-              class="link"
-              :to="{name: 'Registrierung'}"
-              @click="gotToRegister"
-            >
-              Registrieren
-            </router-link>
-          </p>
-        </div>
-      </container>
-    </div>
-  </v-form>
-</template>
-

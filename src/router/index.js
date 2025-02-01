@@ -10,6 +10,9 @@ import FahrerProfil from '@/components/FahrerProfil.vue'
 import LoginView from '@/components/LoginView.vue'
 import RegisterView from '@/components/RegisterView.vue'
 import BewertungView from '@/components/BewertungView.vue'
+import HomeView from '@/components/HomeView.vue'
+import AnfragenVerwalten from '@/components/AnfragenVerwalten.vue'
+import FahrtenListe from '@/components/FahrtenListe.vue'
 //import AddFahrtView from '@/components/AddFahrtView.vue'
 
 //import { components } from 'vuetify/dist/vuetify-labs.js'
@@ -19,12 +22,24 @@ const router = createRouter({
   routes: [ 
 
 
-    // {
-    //   path: '/home',
-    //   name: 'Home',
-    //   component: Home
+    {
+      path: '/home',
+      name: 'Home',
+      component: HomeView
 
-    // },
+    },
+
+    {
+      path: '/verwaltung',
+      name: 'Anfragenverwaltung',
+      component: AnfragenVerwalten
+    },
+
+    {
+      path: '/liste',
+      name: 'Liste',
+      component: FahrtenListe
+    },
 
     {
       path: '/registrierung',

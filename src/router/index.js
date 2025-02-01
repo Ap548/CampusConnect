@@ -22,12 +22,24 @@ const router = createRouter({
   routes: [ 
 
 
-    // {
-    //   path: '/home',
-    //   name: 'Home',
-    //   component: Home
+    {
+      path: '/home',
+      name: 'Home',
+      component: HomeView
 
-    // },
+    },
+
+    {
+      path: '/verwaltung',
+      name: 'Anfragenverwaltung',
+      component: AnfragenVerwalten
+    },
+
+    {
+      path: '/liste',
+      name: 'Liste',
+      component: FahrtenListe
+    },
 
     {
       path: '/registrierung',

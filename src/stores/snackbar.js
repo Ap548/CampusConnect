@@ -16,4 +16,7 @@ export const useStore = defineStore("main", {
       this.snackbar.show = true;
     }
   },
+  setSnackbarVisibility(value){
+    this.snackbar.show = value;
+  }
 });

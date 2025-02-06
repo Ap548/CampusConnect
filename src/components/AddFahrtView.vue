@@ -1,3 +1,117 @@
+<template>
+  <v-container fluid>
+    <!-- Überschrift -->
+    <v-row>
+      <v-col cols="12">
+        <v-card class="pa-4">
+          <v-card-title class="text-h5">
+            Fahrten erstellen
+          </v-card-title>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <!-- Abfahrtsort und Zielort -->
+    <v-row>
+      <v-col
+        cols="12"
+        sm="6"
+      >
+        <v-autocomplete
+          v-model="start"
+          :item-props="itemProps"
+          :items="locations"
+          label="Startpunkt"
+          placeholder="Von"
+          prepend-inner-icon="mdi-map-marker-account-outline"
+          variant="solo-filled"
+          rounded
+        />
+      </v-col>
+      <v-col
+        cols="12"
+        sm="6"
+      >
+        <v-autocomplete
+          v-model="ziel"
+          :item-props="itemProps"
+          :items="locations"
+          label="Ziel"
+          placeholder="Bis"
+          prepend-inner-icon="mdi-map-marker-account-outline"
+          variant="solo-filled"
+          rounded
+        />
+      </v-col>
+    </v-row>
+
+    <!-- Datum -->
+    <v-row>
+      <v-col
+        cols="12"
+        sm="6"
+      >
+        <v-date-picker
+          v-model="datum"
+          label="Datum"
+
+          prepend-inner-icon="mdi-calendar"
+          variant="solo-filled"
+          rounded
+          @update:model-value="handleDateSelect"
+        />
+      </v-col>
+      <v-col
+        cols="12"
+        sm="6"
+      >
+        <!-- Zeit -->
+
+        <v-time-picker
+          v-model="zeit"
+          format="24hr"
+          color="green"
+          full-width
+          :allowed-minutes="allowedMinutes"
+          @update:model-value="handleTimeSelect"
+        />
+      </v-col>
+    </v-row>
+
+    <!-- Mitfahrer -->
+    <!-- Personenanzahl auswählen -->
+    <v-row>
+      <v-col
+        cols="12"
+        sm="6"
+      >
+        <v-select
+          v-model="anzahl_mitfahrer"
+          label="Personenanzahl"
+          :items="[1, 2, 3, 4, 5]"
+          outlined
+          dense
+          required
+        />
+      </v-col>
+    </v-row>
+
+    <!-- Button -->
+    <v-row>
+      <v-col cols="12">
+        <v-btn
+          color="primary"
+          dark
+          rounded
+          @click="submitFahrt"
+        >
+          Fahrten eintragen
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
 <script setup>
 import { ref } from "vue";
 import { SessionManager } from "../Manager/sessionManager";
@@ -19,10 +133,68 @@ const timePicker = ref(false);
 
 // Verfügbare Orte
 const locations = [
-  "Universität Bayreuth",
-  "Hauptbahnhof Bayreuth",
-  "Campus Kulmbach",
+  {
+        name: 'Universität Bayreuth',
+        id: 1,
+        icon: 'mdi-account-school-outline'
+      },
+      {
+        name: 'Campus Kulmbach',
+        id: 2,
+        icon:'mdi-account-school-outline'
+      },
+      {
+        name: 'ZOH',
+        id: 3,
+        icon: 'mdi-bus-outline'
+      },
+      {
+        name: 'Hauptbahnhof Bayreuth',
+        id: 4,
+        icon: 'mdi-train-outline'
+      },
+      {
+        name: 'Bahnhof Kulmbach',
+        id: 5,
+        icon: 'mdi-train-outline'
+      },
+      {
+        name: 'Studi am Roten Hügel',
+        id: 6,
+        icon: 'mdi-office-building-outline'
+      },
+      {
+        name: 'Studi Jakobsstraße',
+        id: 7,
+         icon: 'mdi-office-building-outline'
+      },
+      {
+        name: 'Studi Apart',
+        id: 8,
+         icon: 'mdi-office-building-outline'
+      },
+      {
+        name: 'Studi Storchennest',
+        id: 9,
+         icon: 'mdi-office-building-outline'
+      },
+      {
+        name: 'Uni Apart',
+        id: 10,
+         icon: 'mdi-office-building-outline'
+      },
+      {
+        name: 'Studiocomfort',
+        id: 11,
+         icon: 'mdi-office-building-outline'
+      }
 ];
+const itemProps = (location) => {
+        return {
+          title: location.name,
+          icon: location.icon,
+        }
+      }
 
 // Nur Minuten in 5er-Schritten erlauben
 const allowedMinutes = (minute) => minute % 5 === 0;
@@ -64,20 +236,21 @@ const submitFahrt = async () => {
     const { data: clientData, error: clientError } = await supabase
       .from("clients")
       .select("*")
-      .eq("username", user.username);
+      .eq("username", user.username)
+      .single();
 
     if (clientError || clientData.length === 0) {
       console.error("Fehler beim Abrufen der Benutzerinformationen:", clientError || "Benutzer nicht gefunden");
       return;
     }
 
-    // ID des Benutzers abrufen
-     const clientId = clientData[0].id_client;
+    // // ID des Benutzers abrufen
+    //  const clientId = clientData[0].id_client;
 
     // Fahrt in der Tabelle "fahrten" erstellen
     const { data: fahrtData, error: fahrtError } = await supabase.from("fahrten").insert({
-      start: start.value,
-      ziel: ziel.value,
+      start: start.value.name,
+      ziel: ziel.value.name,
       datum: datum.value,
       zeit: zeit.value,
       anzahl_mitfahrer: anzahl_mitfahrer.value || null, // Falls leer, wird `null` eingefügt
@@ -89,20 +262,20 @@ const submitFahrt = async () => {
       return;
     }
 
-    const fahrtId = fahrtData[0].id_fahrt;
+    // const fahrtId = fahrtData[0].id_fahrt;
 
-    // Eintrag in der Tabelle "verfasst_von" erstellen
-    const { error: verfasstError } = await supabase.from("verfasst_von").insert({
-      id_user: clientId,
-      id_fahrt: fahrtId
-    });
+    // // Eintrag in der Tabelle "verfasst_von" erstellen
+    // const { error: verfasstError } = await supabase.from("verfasst_von").insert({
+    //   id_user: clientId,
+    //   id_fahrt: fahrtId
+    // });
 
-    if (verfasstError) {
-      console.error("Fehler beim Erstellen des Eintrags in 'verfasst_von':", verfasstError);
-      return;
-    }
+    // if (verfasstError) {
+    //   console.error("Fehler beim Erstellen des Eintrags in 'verfasst_von':", verfasstError);
+    //   return;
+    // }
 
-    console.log("Fahrt erfolgreich erstellt und in 'verfasst_von' referenziert");
+    // console.log("Fahrt erfolgreich erstellt und in 'verfasst_von' referenziert");
 
     // Optional: Formular zurücksetzen
     start.value = "";
@@ -133,136 +306,3 @@ const submitFahrt = async () => {
   height: 100%;
 }
 </style>
-
-<template>
-    <v-container class="container">
-      <v-card
-        class="FahrtenFormular"
-        title="Fahrten"
-      >
-        <!-- Abfahrtsort und Zielort -->
-        <v-row>
-          <v-col>
-            <v-select
-              v-model="start"
-              :items="locations"
-              label="Startpunkt"
-              placeholder="Von"
-              prepend-inner-icon="mdi-map-marker-account-outline"
-              variant="solo-filled"
-              rounded
-            />
-          </v-col>
-          <v-col>
-            <v-icon
-              icon="mdi-ray-start-arrow"
-              size="x-large"
-            />
-          </v-col>
-          <v-col>
-            <v-select
-              v-model="ziel"
-              :items="locations"
-              label="Ziel"
-              placeholder="Bis"
-              prepend-inner-icon="mdi-map-marker-account-outline"
-              variant="solo-filled"
-              rounded
-            />
-          </v-col>
-        </v-row>
-  
-        <!-- Datum -->
-        <v-row>
-          <v-col>
-            <v-text-field
-              v-model="formattedDatum"
-              label="Datum"
-              prepend-inner-icon="mdi-calendar"
-              variant="solo-filled"
-              rounded
-              readonly
-              @click="date = true"
-            >
-              <v-menu
-                v-model="date"
-                :close-on-content-click="false"
-                activator="parent"
-                transition="scale-transition"
-                offset-y
-              >
-                <v-date-picker
-                  v-model="datum"
-                  no-title
-                  full-width
-                  @update:model-value="handleDateSelect"
-                />
-              </v-menu>
-            </v-text-field>
-          </v-col>
-        </v-row>
-  
-        <!-- Zeit -->
-        <v-row>
-          <v-col>
-            <v-text-field
-              v-model="formattedZeit"
-              label="Uhrzeit"
-              prepend-inner-icon="mdi-clock-time-four-outline"
-              variant="solo-filled"
-              rounded
-              readonly
-              @click="timePicker = true"
-            >
-              <v-menu
-                v-model="timePicker"
-                :close-on-content-click="false"
-                activator="parent"
-                transition="scale-transition"
-                offset-y
-              >
-                <v-time-picker
-                  v-model="zeit"
-                  format="24hr"
-                  color="green"
-                  full-width
-                  :allowed-minutes="allowedMinutes"
-                  @update:model-value="handleTimeSelect"
-                />
-              </v-menu>
-            </v-text-field>
-          </v-col>
-        </v-row>
-  
-        <!-- Mitfahrer -->
-        <v-row>
-          <v-col>
-            <v-text-field
-              v-model="mitfahrer"
-              label="Mitfahrer"
-              placeholder="Anzahl der Mitfahrer"
-              type="number"
-              prepend-inner-icon="mdi-account-outline"
-              variant="solo-filled"
-              rounded
-            />
-          </v-col>
-        </v-row>
-  
-        <!-- Button -->
-        <v-row>
-          <v-btn
-            color="primary"
-            dark
-            rounded
-            @click="submitFahrt"
-          >
-            Fahrten eintragen
-          </v-btn>
-        </v-row>
-      </v-card>
-    </v-container>
-  </template>
-  
-
-  

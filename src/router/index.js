@@ -13,7 +13,7 @@ import BewertungView from '@/components/BewertungView.vue'
 import HomeView from '@/components/HomeView.vue'
 import AnfragenVerwalten from '@/components/AnfragenVerwalten.vue'
 import FahrtenListe from '@/components/FahrtenListe.vue'
-//import AddFahrtView from '@/components/AddFahrtView.vue'
+import AddFahrtView from '@/components/AddFahrtView.vue'
 
 
 //import { components } from 'vuetify/dist/vuetify-labs.js'
@@ -61,11 +61,11 @@ const router = createRouter({
 
     },
 
-   /* {
+    {
         path:'/fahrt',
         name: 'Fahrt',
         component: AddFahrtView
-    },*/
+    },
 
      {
       path: '/profil',

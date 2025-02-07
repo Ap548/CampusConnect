@@ -36,11 +36,7 @@ const router = createRouter({
       component: AnfragenVerwalten
     },
 
-    {
-      path: '/liste',
-      name: 'Liste',
-      component: FahrtenListe
-    },
+  
 
     {
       path: '/registrierung',
@@ -72,6 +68,12 @@ const router = createRouter({
       name: 'Profil',
       component: FahrerProfil
      },
+
+     {
+      path: '/fahrten-suche',
+      name: 'Fahrten-Suche',
+      component: FahrtenListe
+     }
 
     
 

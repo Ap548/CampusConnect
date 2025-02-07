@@ -4,6 +4,7 @@
   <v-snackbar
     :model-value="snackbar.show"
     :color="snackbar.color"
+    rounded="pill"
     timeout="5000"
     @update:model-value="store.setSnackbarVisibility"
   >

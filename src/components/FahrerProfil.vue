@@ -22,6 +22,11 @@
         <h2><button @click="Bio">Bio</button></h2>
         <p><textarea ref="Bio" class="bioInput" @input="adjustHeight" rows="1"></textarea></p>
       </div>
+
+      <!--neu-->
+      <button @click="() => ToggleBewertungView('buttonTrigger')">Bewertung öffnen</button>
+      <BewertungView v-if="BewertungViewTriggers.buttonTrigger" :ToggleBewertungView="() => ToggleBewertungView('buttonTrigger')"></BewertungView>
+
       <div class="Fahrgemeinschaften">
         <h2>Fahrgemeinschaften</h2>
         <!-- Scrollbare Leiste mit Pfeilen -->
@@ -30,22 +35,14 @@
           <button class="scroll-button left" @click="scrollLeft">←</button>
           <!-- Scrollbarer Inhalt -->
           <div class="scroll-content" ref="scrollContent">
-            <!-- Beispiel-Inhalte -->
-            <div class="item">1</div>
-            <div class="item">2</div>
-            <div class="item">3</div>
-            <div class="item">4</div>
-            <div class="item">5</div>
-            <div class="item">6</div>
-            <div class="item">7</div>
-            <div class="item">8</div>
+          Feature bald verfügbar
           </div>
           <!-- Pfeil rechts -->
           <button class="scroll-button right" @click="scrollRight">→</button>
         </div>
       </div>
       <div class="Favoriten">
-        <h2>Favoriten</h2>
+        <h2>Favorisierte Profile</h2>
         <div class="scroll-container">
           <!-- Pfeil links -->
           <button class="scroll-button left" @click="scrollLeft2">←</button>
@@ -62,7 +59,7 @@
         </div>
       </div>
       <div class="Blockiert">
-        <h2>Blockiert</h2>
+        <h2>Blockierte Profile</h2>
         <div class="scroll-container">
           <!-- Pfeil links -->
           <button class="scroll-button left" @click="scrollLeft3">←</button>
@@ -125,8 +122,33 @@ components: {
 
 <script>
 import Profilbildlogo from '@/assets/Profilbildlogo.png';
+import BewertungView from './BewertungView.vue';
+import {ref} from 'vue';
+
 export default 
 {
+//neu
+setup () {
+  const BewertungViewTriggers = ref({
+    buttonTrigger: false
+  });
+
+  const ToggleBewertungView = (trigger) => {
+    BewertungViewTriggers.value[trigger] = !BewertungViewTriggers.value [trigger]
+  }
+
+  return {
+    BewertungView,
+    BewertungViewTriggers,
+    ToggleBewertungView
+  }
+},
+components: {
+  BewertungView
+},
+
+
+
 props: ['ToggleFahrerProfil'],
 
 data:()=>({

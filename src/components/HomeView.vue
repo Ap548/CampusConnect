@@ -2,7 +2,36 @@
 import { supabase } from "../Clients/supabaseClient";
 import { SessionManager } from "../Manager/sessionManager";
 
+//neu
+import FahrerProfil from "./FahrerProfil.vue";
+import {ref} from 'vue';
+
+
 export default {
+//neu
+setup () {
+  const FahrerProfilTriggers = ref({
+    buttonTrigger: false
+  });
+
+  const ToggleFahrerProfil = (trigger) => {
+    FahrerProfilTriggers.value[trigger] = !FahrerProfilTriggers.value [trigger]
+  }
+
+  return {
+    FahrerProfil,
+    FahrerProfilTriggers,
+    ToggleFahrerProfil
+  }
+},
+
+components: {
+  FahrerProfil
+},
+
+
+
+
   data() {
     return {
       locations: [
@@ -129,6 +158,11 @@ export default {
 </script>
 
 <template>
+<!--neu-->
+<button @click="() => ToggleFahrerProfil('buttonTrigger')">Profil öffnen</button>
+<FahrerProfil v-if="FahrerProfilTriggers.buttonTrigger" :ToggleFahrerProfil="() => ToggleFahrerProfil('buttonTrigger')"></FahrerProfil>
+
+
     <div>
       <v-container>
         <v-row>

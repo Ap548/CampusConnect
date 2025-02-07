@@ -14,7 +14,7 @@ import HomeView from '@/components/HomeView.vue'
 import AnfragenVerwalten from '@/components/AnfragenVerwalten.vue'
 import FahrtenListe from '@/components/FahrtenListe.vue'
 //import AddFahrtView from '@/components/AddFahrtView.vue'
-import HomeView from '@/components/HomeView.vue'
+
 
 //import { components } from 'vuetify/dist/vuetify-labs.js'
 

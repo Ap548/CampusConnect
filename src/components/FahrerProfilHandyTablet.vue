@@ -14,14 +14,8 @@
          <div class="scroll-container-big">
           <button class="scroll-button scroll-up" @click="scrollUp">↑</button>
  
- 
- 
- 
- 
- 
- 
   <v-container fluid>
-  <v-row justify="center">
+    <v-row justify="center">
       <v-col
         cols="12"
         sm="10"
@@ -67,7 +61,7 @@
                 color="amber"
                 half-increments
                 readonly
-                size="small"  
+                size="small"
               />
               <p class="text-subtitle-1 mt-2">
                 Gesamtbewertung: {{ profile.overallRating.toFixed(1) }}
@@ -200,56 +194,11 @@
     </v-dialog>
   </v-container>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   <button class="scroll-button scroll-down" @click="scrollDown">↓</button>
 </div>
   </div>
 </div>
 </template>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <script setup>
@@ -261,7 +210,6 @@ import setupRealtime from "@/services/realtimeListener";
 import { useRouter } from 'vue-router';
 import BewertungView from "./BewertungView.vue";
 
-//Anfang Profil
 import { defineProps, defineEmits, ref, onMounted} from 'vue';
 
 
@@ -269,7 +217,6 @@ defineProps(['ToggleFahrerProfil']);
 
 
 const emit = defineEmits(['close']);
-
 
 //const name = ref('FahrerProfil');
 
@@ -282,9 +229,9 @@ const AllgemeineEinstellungen = () => {
   console.log('Allgemeine Einstellungen aufgerufen');
 };
 
-const Bearbeiten = () => {
+/*const Bearbeiten = () => {
   console.log('Bearbeiten aufgerufen');
-};
+};*/
 
 /*const Schließen = () => {
   closeFahrerprofil();
@@ -300,20 +247,6 @@ const scrollDown = () => {
   const container = document.querySelector('.scroll-container-big');
   container?.scrollBy({ top: 100, behavior: 'smooth' });
 };
-// Ende Profil
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -479,14 +412,15 @@ onMounted(() => {
 }
 .rating{
   margin: auto;
- }
+}
+
 
   .openFahrerProfil {
     padding: 20px;
     margin: 100px auto;
     background: white;
-    width: 900px; /*600px */
-    max-width: 900px;
+    width: 600px; /*90% */
+    max-width: 600px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -567,8 +501,8 @@ onMounted(() => {
 
 
   .scroll-container-big{
-  max-width: 900px; /* 560px */ 
-  max-height: 620px; /* 620px */
+  max-width: 560px;
+  max-height: 620px;
   overflow-y: auto;
   position: relative;
   border: 2px solid lightgray;
@@ -628,7 +562,4 @@ onMounted(() => {
   .scroll-container::-webkit-scrollbar-thumb:hover{
   background-color: darkgray;
   }
-
-
-
 </style>

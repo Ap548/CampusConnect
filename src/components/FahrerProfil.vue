@@ -48,11 +48,11 @@
           <button class="scroll-button left" @click="scrollLeft2">←</button>
           <!-- Scrollbarer Inhalt -->
           <div class="scroll-content" ref="scrollContent2">
-            <!-- Beispiel-Inhalte -->
+            <!-- Beispiel-Inhalte 
             <div class="item">1</div>
             <div class="item">2</div>
             <div class="item">3</div>
-            <div class="item">4</div>
+            <div class="item">4</div>-->
           </div>
           <!-- Pfeil rechts -->
           <button class="scroll-button right" @click="scrollRight2">→</button>
@@ -65,11 +65,11 @@
           <button class="scroll-button left" @click="scrollLeft3">←</button>
           <!-- Scrollbarer Inhalt -->
           <div class="scroll-content" ref="scrollContent3">
-            <!-- Beispiel-Inhalte -->
+            <!-- Beispiel-Inhalte
             <div class="item">1</div>
             <div class="item">2</div>
             <div class="item">3</div>
-            <div class="item">4</div>
+            <div class="item">4</div> -->
           </div>
           <!-- Pfeil rechts -->
           <button class="scroll-button right" @click="scrollRight3">→</button>

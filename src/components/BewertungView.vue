@@ -6,6 +6,7 @@
   export default {
     data() {
       return {
+        ratingDialog: false,
         ratings: {
           pünktlichkeit: 0,
           zuverlässigkeit: 0,
@@ -32,7 +33,16 @@
       }
     },
     methods: {
+
+      closeBewertung(){
+        this.ratingDialog = false;
+      },
+
       async submitRating() { //TODO : Supabase verlinken
+
+        this.closeBewertung();
+        console.log('ratingDialog nach close Bewertung:', this.ratingDialog);
+
         if (!this.user) {
           console.error('Benutzer nicht angemeldet. Bewertung kann nicht gespeichert werden.');
           return;

@@ -222,6 +222,18 @@
                         >
                           {{ anfrage.status }}
                         </v-chip>
+
+<!--neu-->
+                        <v-btn
+                          color="primary"
+                         @click.stop="openRatingDialog(anfrage)"
+                        >
+                          Bewertung abgeben
+                        </v-btn>
+
+
+
+
                       </v-card-text>
                     </v-card-item>
                   </v-card>
@@ -241,6 +253,17 @@
         </v-card>
       </v-col>
     </v-row>
+
+    <!--neu-->
+    <v-dialog
+      v-model="ratingDialog"
+    >
+      <BewertungView
+        class="rating"
+        @rating-submitted="closeRatingDialog"
+      />
+    </v-dialog>
+
   </v-container>
 </template>
 
@@ -250,6 +273,7 @@ import { supabase } from "@/Clients/supabaseClient";
 import gsap from "gsap";
 import { SessionManager } from "@/Manager/sessionManager";
 import { useRouter } from "vue-router";
+import BewertungView from "./BewertungView.vue";
 
 const router = useRouter();
 
@@ -496,6 +520,23 @@ const handleGesendeteAnfrageClick = (anfrage) => {
 //  Öffnet das Standard-E-Mail-Programm
 const openEmail = (email) => {
   window.location.href = `mailto:${email}`;
+};
+
+// Bewertung
+const ratingDialog = ref(false);
+
+const openRatingDialog = (anfrage) => {
+  const heute = new Date(); //aktuelles Datum
+  const fahrtDatum =new Date(anfrage.fahrt.datum); //Datum der Fahrt
+
+  if (anfrage.status === "akzeptiert" && fahrtDatum < heute) {
+    ratingDialog.value = true;
+  } else{
+    alert ("Die Fahrt wurde nicht akzeptiert oder hat noch nicht stattgefunden")
+  }
+};
+const closeRatingDialog = () => {
+    ratingDialog.value = false;
 };
 
 onMounted(() => {

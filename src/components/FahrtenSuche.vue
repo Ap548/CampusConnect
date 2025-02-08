@@ -1,5 +1,124 @@
+<template>
+  <div>
+    <v-container>
+      <v-row>
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <v-select
+            v-model="start"
+            v-model:search="autoCompleteSearchValue"
+            class="select"
+            label="Startort"
+            :items="locations"
+            item-title="name"
+            item-value="name"
+            prepend-icon="mdi-map-marker-outline"
+            outlined
+            dense
+          >
+            <template #item="{props, item }">
+              <v-list-item v-bind="props">
+                <template #prepend>
+                  <v-icon :icon="item.raw.icon" />
+                </template>
+              </v-list-item>
+            </template>
+          </v-select>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <v-select
+            v-model="ziel"
+            v-model:search="autoCompleteSearchValue"
+            class="select"
+            label="Zielort"
+            :items="locations"
+            item-title="name"
+            item-value="name"
+            prepend-icon="mdi-map-marker"
+            outlined
+          >
+            <template #item="{ props, item }">
+              <v-list-item v-bind="props">
+                <template #prepend>
+                  <v-icon :icon="item.raw.icon" />
+                </template>
+              </v-list-item>
+            </template>
+          </v-select>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col cols="12">
+          <v-btn
+            class="button"
+
+            rounded
+            @click="searchRides"
+          >
+            Fahrten suchen
+          </v-btn>
+        </v-col>
+      </v-row>
+
+      <v-row v-if="fahrten.length">
+        <v-col
+
+          cols="12"
+        >
+          <v-card
+            v-for="fahrt in fahrten"
+            :key="fahrt.id_fahrt"
+            class="mb-4"
+          >
+            <v-card-title>
+              Fahrt von {{ fahrt.start }} → {{ fahrt.ziel }}
+            </v-card-title>
+            <v-card-subtitle>
+              Datum: {{ fahrt.datum }} | Uhrzeit: {{ fahrt.zeit }}
+            </v-card-subtitle>
+            <v-card-text>
+              <p>Plätze verfügbar: {{ fahrt.anzahl_mitfahrer }}</p>
+              <p>Erstellt von: {{ fahrt.created_by }}</p>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                class="btn-request"
+                rounded
+                border
+                @click="anfrageStellen(fahrt.id_fahrt)"
+              >
+                Anfragen
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+
+      <v-row v-else>
+        <v-col cols="12">
+          <v-alert
+            type="info"
+            text
+          >
+            Keine Fahrten gefunden
+          </v-alert>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
+</template>
+
+
 <script>
-  
+
 import { useStore } from "@/stores/snackbar";
 import { supabase } from "@/Clients/supabaseClient";
 import { SessionManager } from "@/Manager/sessionManager";
@@ -11,8 +130,8 @@ export default {
   data() {
     return {
       locations: [
-        { name: "Universität Bayreuth", id: 1, icon: "mdi-account-school-outline" },
-        { name: "Campus Kulmbach", id: 2, icon: "mdi-account-school-outline" },
+        { name: "Universität Bayreuth", id: 1, icon: "mdi-school-outline" },
+        { name: "Campus Kulmbach", id: 2, icon: "mdi-school-outline" },
         { name: "ZOH", id: 3, icon: "mdi-bus" },
         { name: "Hauptbahnhof Bayreuth", id: 4, icon: "mdi-train" },
         { name: "Bahnhof Kulmbach", id: 5, icon: "mdi-train" },
@@ -47,14 +166,7 @@ export default {
 
     async searchRides() {
       try {
-        // Aktuelles Datum und Zeit
-        // const currentDate = new Date();
-        // const currentISODate = currentDate.toISOString().split("T")[0];
-        // const currentTime = currentDate.toTimeString().split(" ")[0];
-
-        // console.log("Aktuelles Datum:", currentISODate);
-        // console.log("Aktuelle Uhrzeit:", currentTime);
-
+        
         // Supabase-Abfrage
         const { data, error } = await supabase
           .from("fahrten")
@@ -147,127 +259,3 @@ color : rgba(35, 50, 26, 0.87);
 }
 
 </style>
-
-
-
-
-
-<template>
-    <div>
-      <v-container>
-        <v-row>
-          <v-col
-            cols="12"
-            md="6"
-          >
-            <v-select
-              v-model="start"
-              v-model:search="autoCompleteSearchValue"
-              class="select"
-              label="Startort"
-              :items="locations"
-              item-title="name"
-              item-value="name"
-              prepend-icon="mdi-map-marker-outline"
-              outlined
-              dense
-            >
-              <template #item="{props, item }">
-                <v-list-item v-bind="props">
-                  <template #prepend>
-                    <v-icon :icon="item.raw.icon" />
-                  </template>
-                </v-list-item>
-              </template>
-            </v-select>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col
-            cols="12"
-            md="6"
-          >
-            <v-select
-              v-model="ziel"
-              v-model:search="autoCompleteSearchValue"
-              class="select"
-              label="Zielort"
-              :items="locations"
-              item-title="name"
-              item-value="name"
-              prepend-icon="mdi-map-marker"
-              outlined
-            >
-              <template #item="{ props, item }">
-                <v-list-item v-bind="props">
-                  <template #prepend>
-                    <v-icon :icon="item.raw.icon" />
-                  </template>
-                </v-list-item>
-              </template>
-            </v-select>
-          </v-col>
-        </v-row>
-  
-        <v-row>
-          <v-col cols="12">
-            <v-btn
-              class="button"
-  
-              rounded
-              @click="searchRides"
-            >
-              Fahrten suchen
-            </v-btn>
-          </v-col>
-        </v-row>
-  
-        <v-row v-if="fahrten.length">
-          <v-col
-  
-            cols="12"
-          >
-            <v-card
-              v-for="fahrt in fahrten"
-              :key="fahrt.id_fahrt"
-              class="mb-4"
-            >
-              <v-card-title>
-                Fahrt von {{ fahrt.start }} → {{ fahrt.ziel }}
-              </v-card-title>
-              <v-card-subtitle>
-                Datum: {{ fahrt.datum }} | Uhrzeit: {{ fahrt.zeit }}
-              </v-card-subtitle>
-              <v-card-text>
-                <p>Plätze verfügbar: {{ fahrt.anzahl_mitfahrer }}</p>
-                <p>Erstellt von: {{ fahrt.created_by }}</p>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn
-                  class="btn-request"
-                  rounded
-                  border
-                  @click="anfrageStellen(fahrt.id_fahrt)"
-                >
-                  Anfragen
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-        </v-row>
-  
-        <v-row v-else>
-          <v-col cols="12">
-            <v-alert
-              type="info"
-              text
-            >
-              Keine Fahrten gefunden
-            </v-alert>
-          </v-col>
-        </v-row>
-      </v-container>
-    </div>
-  </template>
-  
-  

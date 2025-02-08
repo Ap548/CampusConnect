@@ -14,6 +14,7 @@
     "gsap": "^3.12.7",
     "leaflet": "^1.9.4",
     "leaflet-css": "^0.1.0",
+    "mdi": "^2.2.43",
     "pinia": "^2.3.1",
     "roboto-fontface": "*",
     "router": "^2.0.0",

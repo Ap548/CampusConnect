@@ -98,12 +98,6 @@
       class="mx-auto"
       width="400"
     >
-
-  <!--neu-->
-  <button class="Schließen" @click="ToggleBewertungView()">Schließen</button>
-
-  
-
       <v-card-title class="text-h5">
         Bewerte deine Fahrt
       </v-card-title>

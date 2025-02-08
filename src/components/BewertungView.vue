@@ -41,7 +41,7 @@
         try {
           const { data, error } = await supabase.from('ratings').insert([
             {
-              user_id: this.user.id,
+              verfasser: this.user.username,
               pünktlichkeit: this.ratings.pünktlichkeit,
               zuverlässigkeit: this.ratings.zuverlässigkeit,
               verhalten: this.ratings.verhalten,

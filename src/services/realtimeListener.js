@@ -2,11 +2,11 @@ import { supabase } from "@/Clients/supabaseClient";
 import { SessionManager } from "@/Manager/sessionManager";
 
 /**
- * Richtiges Echtzeit-Setup für Home.vue
+ * Richtiges Echtzeit-Setup 
  * @param {Object} store - Snackbar Store für Benachrichtigungen
  * @param {Function} updateFahrten - Funktion zum Aktualisieren der Fahrtenliste
  */
-export default async function setupRealtime(store, updateFahrten) {
+export default async function setupRealtime(store, router, updateFahrten) {
   try {
     const user = await SessionManager.getUser();
     if (!user) {
@@ -38,13 +38,14 @@ export default async function setupRealtime(store, updateFahrten) {
           store.showSnackbar({
             message: "Eine neue Anfrage liegt vor!",
             color: "info",
-            onClick: () => {
-              store.$router.push({
+            action: () => {
+              router.push({
                 name: "FahrtDetails",
-                params: { id: fahrt_id },
+                params: { idFahrt: fahrt_id },
               });
             },
           });
+
         }
       }
     )
@@ -60,7 +61,7 @@ export default async function setupRealtime(store, updateFahrten) {
     "postgres_changes",
     { event: "UPDATE", schema: "public", table: "anfragen" },
     (payload) => {
-      const { anfrager, status, fahrt_id, start, ziel } = payload.new;
+      const { anfrager, status, start, fahrt_id, ziel } = payload.new;
       const previousStatus = payload.old?.status; // Vorheriger Status auslesen
 
       // Snackbar nur anzeigen, wenn der vorherige Status NICHT identisch mit dem neuen ist
@@ -76,16 +77,16 @@ export default async function setupRealtime(store, updateFahrten) {
           store.showSnackbar({
             message,
             color,
-            onClick: () => {
+            action: () => {
               if (status === "abgelehnt") {
-                store.$router.push({
+                router.push({
                   name: "AlternativeFahrten",
                   query: { start, ziel },
                 });
               } else {
-                store.$router.push({
+                router.push({
                   name: "FahrtDetails",
-                  params: { id: fahrt_id },
+                  params: { idFahrt:  fahrt_id},
                 });
               }
             },

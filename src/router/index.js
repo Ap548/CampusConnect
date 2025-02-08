@@ -6,14 +6,9 @@
 
 // Composables
 import { createRouter, createWebHistory } from 'vue-router/auto'
-import FahrerProfil from '@/components/FahrerProfil.vue'
-import LoginView from '@/components/LoginView.vue'
-import RegisterView from '@/components/RegisterView.vue'
+
 import BewertungView from '@/components/BewertungView.vue'
 import HomeView from '@/components/HomeView.vue'
-import AnfragenVerwalten from '@/components/AnfragenVerwalten.vue'
-import FahrtenListe from '@/components/FahrtenListe.vue'
-import AddFahrtView from '@/components/AddFahrtView.vue'
 
 
 //import { components } from 'vuetify/dist/vuetify-labs.js'
@@ -33,7 +28,7 @@ const router = createRouter({
     {
       path: '/verwaltung',
       name: 'Anfragenverwaltung',
-      component: AnfragenVerwalten
+      component:()=> import("@/components/AnfragenVerwalten.vue")
     },
 
   
@@ -41,13 +36,13 @@ const router = createRouter({
     {
       path: '/registrierung',
       name: 'Registrierung',
-      component: RegisterView
+      component:()=> import("@/components/RegisterView.vue")
     },
 
     {
       path: '/login',
       name: 'Login',
-      component: LoginView
+      component:()=> import("@/components/LoginView.vue")
     },
 
     {
@@ -60,22 +55,35 @@ const router = createRouter({
     {
         path:'/fahrt',
         name: 'Fahrt',
-        component: AddFahrtView
+
+        component:()=> import("@/components/AddFahrtView.vue")
+        
     },
 
      {
       path: '/profil',
       name: 'Profil',
-      component: FahrerProfil
+      
+      component:()=> import("@/components/FahrerProfil.vue")
      },
 
      {
       path: '/fahrten-suche',
       name: 'Fahrten-Suche',
-      component: FahrtenListe
-     }
+      component:()=> import("@/components/FahrtenSuche.vue")
+  
+     },
 
-    
+     {
+      path: '/counter',
+      name:'Counter',
+      component:()=> import("@/components/CounterCo2.vue")
+    },
+    {
+      path: '/liste',
+      name: 'Liste',
+      component:()=> import("@/components/FahrtenListe.vue")
+    }
 
      
     ],

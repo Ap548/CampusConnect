@@ -117,7 +117,7 @@ import { SessionManager } from '@/Manager/sessionManager'; // Importiere Session
         }
 
           //Nach erfolgreichem Login weiter zur Home-Ansicht
-          this.$router.push({name: 'Fahrt'});
+          this.$router.push({name: 'Liste'});
         } catch(err) {
           this.errorMessage = "Ein unerwarteter Fehler ist aufgetreten.";
           console.error("Login-Fehler: ", err);

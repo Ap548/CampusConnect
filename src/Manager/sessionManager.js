@@ -70,6 +70,14 @@ export const SessionManager = {
         console.error("Fehler beim Abmelden:", error.message);
         return { success: false, error: error.message };
       }
+       // Clear local storage
+      localStorage.removeItem('sb-access-token');
+      localStorage.removeItem('sb-refresh-token');
+
+      // Clear cookies (if you are using them)
+      document.cookie = "sb-access-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "sb-refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
       return { success: true };
     } catch (err) {
       console.error("Unerwarteter Fehler bei der Abmeldung:", err);

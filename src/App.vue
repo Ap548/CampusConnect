@@ -10,7 +10,7 @@
         <!-- Profilbild und Benutzername -->
         <v-list-item>
           <v-list-item-avatar @click="goToProfile">
-            <v-img :src="userAvatar" />
+            <v-img :src="userAvatar"/>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ userName }}</v-list-item-title>
@@ -44,7 +44,7 @@
       />
       <!-- Profilbild in der App-Bar -->
       <v-avatar
-        size="40"
+        size="100"
         class="mr-4"
         @click="goToProfile"
       >
@@ -70,7 +70,7 @@
       <v-snackbar
         :model-value="snackbar.show"
         :color="snackbar.color"
-        timeout="3000"
+        timeout="2000"
         rounded="pill"
         @update:model-value="store.setSnackbarVisibility"
       >
@@ -99,6 +99,7 @@ import { onMounted, computed, ref, onUnmounted } from "vue";
 import { useRoute, useRouter } from 'vue-router';
 import { SessionManager } from "./Manager/sessionManager";
 
+
 export default {
   setup() {
     const store = useStore();
@@ -111,11 +112,13 @@ export default {
     const userName = ref('');
 
     const menuItems = [
-      { title: 'Home', path: '/counter', icon: 'mdi-home' },
+      { title: 'Home', path: '/home', icon: 'mdi-home' },
       { title: 'Fahrten suchen', path: '/fahrten-suche', icon: 'mdi-magnify' },
       { title: 'Anfragen', path: '/verwaltung', icon: 'mdi-message-text' },
+      { title: 'Neu', path: '/fahrt', icon:  'mdi-map-marker-plus' }
     ];
 
+    // Während dem Login und der Registrierung soll keine Nav angezeigt werden
     const showNavigation = computed(() => {
       return !['/login', '/registrierung'].includes(route.path);
     });
@@ -124,7 +127,7 @@ export default {
       const user = await SessionManager.getUser();
       if (user) {
         userName.value = user.username;
-        //  Benutzer-Avatar setzen, wenn verfügbar
+        
       } else {
         router.push('/login');
       }
@@ -151,7 +154,7 @@ export default {
     };
 
     const goToProfile = () => {
-      router.push('/liste');
+      router.push('/profil');
     };
 
     return {
@@ -174,5 +177,5 @@ export default {
 .nav{
   color: rgba(47, 96, 36, 0.274);
 }
-/*  bei Bedarf zusätzliche Stile  */
+/* Fügen Sie hier bei Bedarf zusätzliche Stile hinzu */
 </style>

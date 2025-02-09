@@ -76,14 +76,14 @@
           <template #chip="{ props, item }">
             <v-chip
               v-bind="props"
-              :prepend-avatar="item.avatar"
+              
               :text="item.username"
             />
           </template>
           <template #item="{ props, item }">
             <v-list-item
               v-bind="props"
-              :prepend-avatar="item.avatar"
+              
             >
               <v-list-item-title :text="item.username" />
             </v-list-item>

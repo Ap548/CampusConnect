@@ -9,7 +9,7 @@
               >Fahrten & Anfragen
             </v-card-title>
             <v-card-subtitle>
-              Hier können Sie die Anfragen für Ihre Fahrten verwalten.
+              Hier kanst du deine Anfragen verwalten.
             </v-card-subtitle>
           </v-card-item>
 
@@ -82,6 +82,7 @@
                         v-for="anfrage in fahrt.anfragen"
                         :key="anfrage.id_anfrage"
                       >
+                      <!-- Anfrager auflisten und email verlinken -->
                         <v-list-item-avatar color="grey lighten-1">
                           <v-icon>mdi-account</v-icon>
                         </v-list-item-avatar>
@@ -94,6 +95,8 @@
                               {{ anfrage.anfrager }}
                             </a>
                           </v-list-item-title>
+
+                          <!-- Status der Anfrage -->
                           <v-list-item-subtitle class="anfrage-status">
                             <v-chip
                               :color="statusColor(anfrage.status)"
@@ -115,6 +118,8 @@
                             </v-btn>
                           </v-list-item-subtitle>
                         </v-list-item-content>
+
+                        <!-- Status ändern -->
                         <v-list-item-action>
                           <v-btn
                           class="edit-btn-1"
@@ -151,6 +156,7 @@
                         </v-list-item-action>
                       </v-list-item>
                     </v-list>
+                    <!-- Fehlermeldungen -->
                     <v-card-text v-else>
                       <v-alert
                         outlined
@@ -188,6 +194,8 @@
                 </v-alert>
               </v-card-text>
             </v-window-item>
+
+            <!-- zweiter Tab: selbst gestellte Anfrage -->
 
             <v-window-item value="gesendet">
               <v-list v-if="gesendeteAnfragen.length">
@@ -489,7 +497,7 @@ const formatTime = (time) => {
 const handleGesendeteAnfrageClick = (anfrage) => {
   if (anfrage.status === "abgelehnt") {
     router.push({
-      name: "alternativefahrten",
+      name: "Alternativefahrten",
       query: { start: anfrage.fahrt.start, ziel: anfrage.fahrt.ziel },
     });
   }
@@ -499,6 +507,7 @@ const openEmail = (email) => {
   window.location.href = `mailto:${email}`;
 };
 
+// es können nur **vergangene** Fahrten, mit dem Status "akzeptiert" bewertet werden
 const canRateFahrt = (anfrage) => {
   const isAkzeptiert = anfrage.status === 'akzeptiert';
   const fahrtDatum = new Date(anfrage.fahrt.datum);
@@ -522,9 +531,7 @@ onMounted(() => {
   subscribeToAnfragenUpdates();
 });
 
-// onUnmounted(() => {
-//   supabase.removeChannel("anfragen");
-// });
+
 </script>
 
 <style scoped>

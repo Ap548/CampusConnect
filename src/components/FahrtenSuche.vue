@@ -212,12 +212,12 @@ export default {
       this.searchPerformed = true;
       try {
         // Aktuelles Datum und Zeit
-        // const currentDate = new Date();
-        // const currentISODate = currentDate.toISOString().split("T")[0];
-        // const currentTime = currentDate.toTimeString().split(" ")[0];
+        const currentDate = new Date();
+        const currentISODate = currentDate.toISOString().split("T")[0];
+        const currentTime = currentDate.toTimeString().split(" ")[0];
 
-        // console.log("Aktuelles Datum:", currentISODate);
-        // console.log("Aktuelle Uhrzeit:", currentTime);
+        console.log("Aktuelles Datum:", currentISODate);
+        console.log("Aktuelle Uhrzeit:", currentTime);
 
         // Supabase-Abfrage
         const { data, error } = await supabase
@@ -225,7 +225,7 @@ export default {
           .select("*")
           .eq("start", this.start)
           .eq("ziel", this.ziel)
-          // .gte("datum", currentISODate) // Filter für zukünftige Daten
+          .gte("datum", currentISODate) // Filter für zukünftige Daten
           .order("datum", { ascending: true });
 
         if (error) {
@@ -236,11 +236,11 @@ export default {
         console.log("Rohdaten der Fahrten:", data);
 
         // Zusätzlicher Filter für Zeit (nur für Fahrten am aktuellen Datum)
-        this.fahrten = data.filter(() => { //fahrt
-          // if (fahrt.datum <= currentISODate) {
+        this.fahrten = data.filter((fahrt) => { //fahrt
+          if (fahrt.datum <= currentISODate) {
           //   // Zeit überprüfen
-          //   return fahrt.zeit > currentTime;
-          // }
+            return fahrt.zeit > currentTime;
+          }
           // Alle zukünftigen Tage
           return true;
         });
@@ -277,7 +277,9 @@ export default {
           message: "Anfrage erfolgreich gesendet!",
           color: "green",
           action: ()=> {
-            router.push('Anfragenverwaltung')
+            router.push({
+              name: 'Anfragenverwaltung',
+            })
           }
 
         });

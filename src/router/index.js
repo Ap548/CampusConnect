@@ -8,7 +8,7 @@
 import { createRouter, createWebHistory } from 'vue-router/auto'
 
 import BewertungView from '@/components/BewertungView.vue'
-import HomeView from '@/components/HomeView.vue'
+
 
 
 //import { components } from 'vuetify/dist/vuetify-labs.js'
@@ -17,17 +17,17 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [ 
 
-
     {
-      path: '/home',
-      name: 'Home',
-      component: HomeView
-
+      path: '/alternativen',
+      name: 'AlternativeFahrten',
+      component: ()=>import("@/components/AlternativeFahrten.vue"),
+      props: true
     },
+
 
     {
       path: '/verwaltung',
-      name: 'Anfragenverwaltung',
+      name: 'AnfragenVerwaltung',
       component:()=> import("@/components/AnfragenVerwalten.vue")
     },
 
@@ -63,8 +63,8 @@ const router = createRouter({
      {
       path: '/profil',
       name: 'Profil',
-      
-      component:()=> import("@/components/FahrerProfil.vue")
+      component:()=> import("@/components/FahrtenListe.vue"),
+      props:true
      },
 
      {
@@ -75,15 +75,11 @@ const router = createRouter({
      },
 
      {
-      path: '/counter',
+      path: '/home',
       name:'Counter',
       component:()=> import("@/components/CounterCo2.vue")
     },
-    {
-      path: '/liste',
-      name: 'Liste',
-      component:()=> import("@/components/FahrtenListe.vue")
-    }
+   
 
      
     ],

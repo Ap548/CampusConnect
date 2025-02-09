@@ -72,12 +72,7 @@
         <v-card class="mt-6 pa-4">
           <h3 class="text-h5 mb-4 d-flex align-center justify-space-between">
             Meine Fahrten
-            <v-btn
-              icon="mdi-plus"
-              small
-              color="rgba(47, 96, 36, 0.274)"
-              @click="isOverlayActive = true"
-            />
+           
           </h3>
           <v-row>
             <v-col
@@ -122,25 +117,7 @@
       </v-col>
     </v-row>
 
-    <!-- Overlay für Fahrtenformular -->
-    <v-overlay
-      v-model="isOverlayActive"
-      class="align-center justify-center"
-      scroll-strategy="none"
-    >
-      <v-card
-
-        width="100%"
-        max-width="2500px"
-        class="overflow-y-auto"
-        style="max-height: 80vh"
-      >
-        <FahrtenFormular
-          @close="isOverlayActive = false"
-          @fahrten-aktualisieren="loadFahrten"
-        />
-      </v-card>
-    </v-overlay>
+   
 
     <!-- Gemeinsamer Edit Dialog -->
     <v-dialog
@@ -223,7 +200,6 @@ import { SessionManager } from "@/Manager/sessionManager";
 import setupRealtime from "@/services/realtimeListener";
 import { useRouter } from 'vue-router';
 
-import FahrtenFormular from "./AddFahrtView.vue";
 
 
 const router = useRouter();
@@ -254,7 +230,7 @@ const avatarFile = ref(null);
 const dialog = ref(false);
 const editedFahrt = ref(null);
 
-const isOverlayActive = ref(false);
+
 
 const user = await SessionManager.getUser();
 

@@ -24,7 +24,7 @@
           <header class="header">
             <h1>Registrierung</h1>
 
-          <!-- <h4>registriere dich und fahre los</h4> -->
+         
           </header>
           <div class="textfield">
             <v-text-field
@@ -218,17 +218,7 @@ margin-bottom: -100px;
 
 }
 
-/* .header h4 {
 
-  display: flex;
-  justify-content: center;
-  color: rgb(54, 70, 45);
-  padding-bottom: 50px ;
-  font-style: italic;
-  font-weight: 300;
-  font-size: larger;
-
-} */
 
  .textfield {
 

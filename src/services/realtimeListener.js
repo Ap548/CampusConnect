@@ -22,7 +22,7 @@ export default async function setupRealtime(store, router, updateFahrten) {
         { event: "*", schema: "public", table: "fahrten" },
         (payload) => {
           console.log("Fahrten-Update erhalten:", payload);
-          updateFahrten(); // Aktualisiert die Fahrtenliste in Home.vue
+          updateFahrten(); // Aktualisiert die Fahrtenliste 
         }
       )
       .subscribe();
@@ -40,7 +40,7 @@ export default async function setupRealtime(store, router, updateFahrten) {
             color: "info",
             action: () => {
               router.push({
-                name: "/AnfragenVerwaltung",
+                name: "AnfragenVerwaltung",
                 
               });
             },
@@ -61,7 +61,7 @@ export default async function setupRealtime(store, router, updateFahrten) {
     "postgres_changes",
     { event: "UPDATE", schema: "public", table: "anfragen" },
     (payload) => {
-      const { anfrager, status, start, ziel } = payload.new;
+      const { anfrager, status, start, ziel,  } = payload.new;
       const previousStatus = payload.old?.status; // Vorheriger Status auslesen
 
       // Snackbar nur anzeigen, wenn der vorherige Status NICHT identisch mit dem neuen ist
@@ -81,11 +81,11 @@ export default async function setupRealtime(store, router, updateFahrten) {
               if (status === "abgelehnt") {
                 router.push({
                   name: "AlternativeFahrten",
-                  query: { start, ziel },
+                  query: {  start, ziel },
                 });
               } else{
                 router.push({
-                  name: "Anfragenverwaltung",
+                  name: "AnfragenVerwaltung",
                   
                 });
               }

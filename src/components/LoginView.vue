@@ -72,7 +72,7 @@
 
 
 <script>
-//import { supabase } from '@/Clients/supabaseClient';
+
 
 import { SessionManager } from '@/Manager/sessionManager'; // Importiere Session-Handling
 
@@ -92,10 +92,7 @@ import { SessionManager } from '@/Manager/sessionManager'; // Importiere Session
     methods: {
 
 
-      goToRatingCard(){
-          this.$router.push({ name: 'Bewertung'})
-        },
-
+    
       async loginUser() {
         try {
           const { data, error } = await SessionManager.signIn(this.email, this.password);
@@ -116,8 +113,8 @@ import { SessionManager } from '@/Manager/sessionManager'; // Importiere Session
           return;
         }
 
-          //Nach erfolgreichem Login weiter zur Home-Ansicht
-          this.$router.push({name: 'Liste'});
+          //Nach erfolgreichem Login weiter zur Profil-Ansicht
+          this.$router.push({name: 'Profil'});
         } catch(err) {
           this.errorMessage = "Ein unerwarteter Fehler ist aufgetreten.";
           console.error("Login-Fehler: ", err);

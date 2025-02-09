@@ -19,6 +19,16 @@ or
 ```bash
 yarn install
 ```
+### Installation
+
+npm i gsap
+npm i pinia
+npm supabase
+npm install @supabase/supabase-js
+npm install vue-ruter@4
+
+
+
 
 ### Development Server
 

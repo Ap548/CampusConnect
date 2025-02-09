@@ -3,9 +3,13 @@
     <!-- Überschrift -->
     <v-row>
       <v-col cols="12">
-        <v-card class="pa-4">
-          <v-card-title class="text-h5">
-            Fahrten erstellen
+        <v-card
+          class="pa-4"
+          elevation="4"
+          rounded="lg"
+        >
+          <v-card-title class="text-h5 primary--text">
+            Fahrt erstellen
           </v-card-title>
         </v-card>
       </v-col>
@@ -19,13 +23,15 @@
       >
         <v-autocomplete
           v-model="start"
-          :item-props="itemProps"
           :items="locations"
+          item-title="name"
+          item-value="name"
           label="Startpunkt"
           placeholder="Von"
           prepend-inner-icon="mdi-map-marker-account-outline"
-          variant="solo-filled"
-          rounded
+          variant="outlined"
+          rounded="lg"
+          clearable
         />
       </v-col>
       <v-col
@@ -34,18 +40,59 @@
       >
         <v-autocomplete
           v-model="ziel"
-          :item-props="itemProps"
           :items="locations"
+          item-title="name"
+          item-value="name"
           label="Ziel"
           placeholder="Bis"
           prepend-inner-icon="mdi-map-marker-account-outline"
-          variant="solo-filled"
-          rounded
+          variant="outlined"
+          rounded="lg"
+          clearable
         />
       </v-col>
     </v-row>
 
-    <!-- Datum -->
+    <!-- Benutzernamen-Suche -->
+    <v-row>
+      <v-col cols="12">
+        <v-autocomplete
+          v-model="inviteUser"
+          v-model:search-input="searchUsername"
+          :items="users"
+          item-title="username"
+          item-value="username"
+          label="Benutzer einladen"
+          placeholder="@username"
+          prepend-inner-icon="mdi-account-plus-outline"
+          variant="outlined"
+          rounded="lg"
+          clearable
+          chips
+          closable-chips
+          multiple
+          @update:search-input="fetchUsers"
+        >
+          <template #chip="{ props, item }">
+            <v-chip
+              v-bind="props"
+              :prepend-avatar="item.avatar"
+              :text="item.username"
+            />
+          </template>
+          <template #item="{ props, item }">
+            <v-list-item
+              v-bind="props"
+              :prepend-avatar="item.avatar"
+            >
+              <v-list-item-title :text="item.username" />
+            </v-list-item>
+          </template>
+        </v-autocomplete>
+      </v-col>
+    </v-row>
+
+    <!-- Datum und Uhrzeit -->
     <v-row>
       <v-col
         cols="12"
@@ -54,58 +101,67 @@
         <v-date-picker
           v-model="datum"
           label="Datum"
-
+          :allowed-dates="allowedDates"
           prepend-inner-icon="mdi-calendar"
-          variant="solo-filled"
-          rounded
-          @update:model-value="handleDateSelect"
+          variant="outlined"
+          rounded="lg"
         />
       </v-col>
       <v-col
         cols="12"
         sm="6"
       >
-        <!-- Zeit -->
-
         <v-time-picker
           v-model="zeit"
           format="24hr"
-          color="green"
-          full-width
+          label="Uhrzeit"
+          :allowed-hours="allowedHours"
           :allowed-minutes="allowedMinutes"
-          @update:model-value="handleTimeSelect"
+          prepend-inner-icon="mdi-clock-outline"
+          variant="outlined"
+          rounded="lg"
         />
       </v-col>
     </v-row>
 
     <!-- Mitfahrer -->
-    <!-- Personenanzahl auswählen -->
     <v-row>
-      <v-col
-        cols="12"
-        sm="6"
-      >
-        <v-select
-          v-model="anzahl_mitfahrer"
-          label="Personenanzahl"
-          :items="[1, 2, 3, 4, 5]"
-          outlined
-          dense
-          required
-        />
+      <v-col cols="12">
+        <v-card
+          class="pa-4"
+          elevation="2"
+          rounded="lg"
+        >
+          <v-card-title class="text-subtitle-1">
+            Mitfahrer (max. 4)
+          </v-card-title>
+          <v-card-text>
+            <v-slider
+              v-model="anzahl_mitfahrer"
+              :max="4"
+              :min="0"
+              :step="1"
+              tick-size="4"
+              ticks="always"
+              thumb-label="always"
+              thumb-color="rgba(47, 96, 36, 0.274)"
+              color="rgba(38, 72, 30, 0.767)"
+            />
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
 
     <!-- Button -->
-    <v-row>
-      <v-col cols="12">
+    <v-row >
+      <v-col cols="12" >
         <v-btn
-          color="primary"
-          dark
-          rounded
+        class="button"
+          color="rgba(47, 96, 36, 0.274)"
+          rounded="lg"
           @click="submitFahrt"
         >
-          Fahrten eintragen
+          Fahrt erstellen
         </v-btn>
       </v-col>
     </v-row>
@@ -113,7 +169,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { SessionManager } from "../Manager/sessionManager";
 import { supabase } from "../Clients/supabaseClient";
 
@@ -124,185 +180,150 @@ const user = await SessionManager.getUser();
 const start = ref("");
 const ziel = ref("");
 const datum = ref(null);
-const formattedDatum = ref("");
 const zeit = ref(null);
-const formattedZeit = ref("");
-const anzahl_mitfahrer = ref("");
-const date = ref(false);
-const timePicker = ref(false);
+const anzahl_mitfahrer = ref(0);
+const inviteUser = ref([]);
+const searchUsername = ref("");
+const users = ref([]);
 
 // Verfügbare Orte
 const locations = [
-  {
-        name: 'Universität Bayreuth',
-        id: 1,
-        icon: 'mdi-account-school-outline'
-      },
-      {
-        name: 'Campus Kulmbach',
-        id: 2,
-        icon:'mdi-account-school-outline'
-      },
-      {
-        name: 'ZOH',
-        id: 3,
-        icon: 'mdi-bus-outline'
-      },
-      {
-        name: 'Hauptbahnhof Bayreuth',
-        id: 4,
-        icon: 'mdi-train-outline'
-      },
-      {
-        name: 'Bahnhof Kulmbach',
-        id: 5,
-        icon: 'mdi-train-outline'
-      },
-      {
-        name: 'Studi am Roten Hügel',
-        id: 6,
-        icon: 'mdi-office-building-outline'
-      },
-      {
-        name: 'Studi Jakobsstraße',
-        id: 7,
-         icon: 'mdi-office-building-outline'
-      },
-      {
-        name: 'Studi Apart',
-        id: 8,
-         icon: 'mdi-office-building-outline'
-      },
-      {
-        name: 'Studi Storchennest',
-        id: 9,
-         icon: 'mdi-office-building-outline'
-      },
-      {
-        name: 'Uni Apart',
-        id: 10,
-         icon: 'mdi-office-building-outline'
-      },
-      {
-        name: 'Studiocomfort',
-        id: 11,
-         icon: 'mdi-office-building-outline'
-      }
+  { name: "Universität Bayreuth", id: 1 },
+  { name: "Campus Kulmbach", id: 2 },
+  { name: "ZOH", id: 3 },
+  { name: "Hauptbahnhof Bayreuth", id: 4 },
+  { name: "Bahnhof Kulmbach", id: 5 },
+  { name: "Studi am Roten Hügel", id: 6},
+  { name: "Studi Jakobsstraße", id:7 },
+  { name: "Studi Apart", id: 8},
+  { name: "Studi Storchennest", id: 9},
+  { name: "Uni Apart", id: 10},
+  { name: "Studiocomfort", id: 11}
 ];
-const itemProps = (location) => {
-        return {
-          title: location.name,
-          icon: location.icon,
-        }
-      }
 
-// Nur Minuten in 5er-Schritten erlauben
-const allowedMinutes = (minute) => minute % 5 === 0;
+const fetchUsers = async (searchTerm = "") => {
+  try {
+    let query = supabase.from("clients").select("username");
 
-// Datum formatieren in dd/mm/yy
-const handleDateSelect = (value) => {
-  if (value) {
-    const dateObj = new Date(value);
-    const day = String(dateObj.getDate()).padStart(2, "0");
-    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
-    const year = String(dateObj.getFullYear()).slice(-2);
-    formattedDatum.value = `${day}/${month}/${year}`;
-    setTimeout(() => {
-      date.value = false; // Verzögertes Schließen des Menüs
-    }, 300); // 300 Millisekunden Verzögerung
+    if (searchTerm) {
+      query = query.ilike("username", `%${searchTerm}%`);
+    }
+
+    const { data, error } = await query.limit(5);
+
+    if (error) {
+      console.error("Error fetching users:", error);
+    } else {
+      users.value = data.map((user) => ({
+        username: user.username,
+        avatar: `https://api.dicebear.com/7.x/miniavs/svg?seed=${user.username}`,
+      }));
+    }
+  } catch (e) {
+    console.error("Error fetching users:", e);
   }
 };
 
-// Uhrzeit formatieren in hh:mm
-const handleTimeSelect = (value) => {
-  if (value) {
-    const [hours, minutes] = value.split(":");
-    formattedZeit.value = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
-    setTimeout(() => {
-      timePicker.value = false; // Verzögertes Schließen des Menüs
-    }, 200); // 200 Millisekunden Verzögerung
-  }
+// Datumvalidierung
+const allowedDates = (date) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Set time to midnight for comparison
+  const selectedDate = new Date(date);
+  return selectedDate >= today;
 };
 
-// Fahrt speichern
+const allowedHours = (hour) => {
+  if (!datum.value) return true;
+
+  const selectedDate = new Date(datum.value);
+  const now = new Date();
+
+  return selectedDate.toDateString() !== now.toDateString() || hour >= now.getHours();
+};
+
 const submitFahrt = async () => {
-  if (!formattedDatum.value || !formattedZeit.value) {
-    console.error("Datum und Zeit müssen ausgefüllt sein!");
+  if (!start.value || !ziel.value || !datum.value || !zeit.value) {
+    console.error("Bitte füllen Sie alle Felder aus!");
     return;
   }
 
   try {
-    // Benutzerinformationen basierend auf dem Benutzernamen abrufen
     const { data: clientData, error: clientError } = await supabase
       .from("clients")
       .select("*")
       .eq("username", user.username)
       .single();
 
-    if (clientError || clientData.length === 0) {
-      console.error("Fehler beim Abrufen der Benutzerinformationen:", clientError || "Benutzer nicht gefunden");
+    if (clientError) {
+      console.error(
+        "Fehler beim Abrufen der Benutzerinformationen:",
+        clientError
+      );
+      return clientData;
+    }
+
+    const { data: fahrtData, error: fahrtError } = await supabase
+      .from("fahrten")
+      .insert({
+        start: start.value,
+        ziel: ziel.value,
+        datum: datum.value,
+        zeit: zeit.value,
+        anzahl_mitfahrer: anzahl_mitfahrer.value || null,
+        created_by: user.username,
+      })
+      .select("id_fahrt")
+      .single();
+
+    if (fahrtError) {
+      console.error("Fehler beim Erstellen der Fahrt:", fahrtError);
       return;
     }
 
-    // // ID des Benutzers abrufen
-    //  const clientId = clientData[0].id_client;
+    console.log("Fahrt erfolgreich erstellt:", fahrtData);
 
-    // Fahrt in der Tabelle "fahrten" erstellen
-    const { data: fahrtData, error: fahrtError } = await supabase.from("fahrten").insert({
-      start: start.value.name,
-      ziel: ziel.value.name,
-      datum: datum.value,
-      zeit: zeit.value,
-      anzahl_mitfahrer: anzahl_mitfahrer.value || null, // Falls leer, wird `null` eingefügt
-      created_by: user.username,
-    }).select("id_fahrt"); // `id_fahrt` für die Referenz in `verfasst_von` abrufen
-
-    if (fahrtError || fahrtData.length === 0) {
-      console.error("Fehler beim Erstellen der Fahrt:", fahrtError || "Fahrt konnte nicht erstellt werden");
-      return;
-    }
-
-    // const fahrtId = fahrtData[0].id_fahrt;
-
-    // // Eintrag in der Tabelle "verfasst_von" erstellen
-    // const { error: verfasstError } = await supabase.from("verfasst_von").insert({
-    //   id_user: clientId,
-    //   id_fahrt: fahrtId
-    // });
-
-    // if (verfasstError) {
-    //   console.error("Fehler beim Erstellen des Eintrags in 'verfasst_von':", verfasstError);
-    //   return;
-    // }
-
-    // console.log("Fahrt erfolgreich erstellt und in 'verfasst_von' referenziert");
-
-    // Optional: Formular zurücksetzen
     start.value = "";
     ziel.value = "";
     datum.value = null;
-    formattedDatum.value = "";
-    zeit.value = "";
-    formattedZeit.value = "";
-    anzahl_mitfahrer.value = "";
+    zeit.value = null;
+    anzahl_mitfahrer.value = 0;
+    inviteUser.value = null;
+    searchUsername.value = "";
+    users.value = [];
   } catch (error) {
-   console.error("Ein unerwarteter Fehler ist aufgetreten:", error);
-   }
+    console.error("Ein unerwarteter Fehler ist aufgetreten:", error);
+  }
 };
+
+
+
+onMounted(() => {
+  fetchUsers();
+});
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+.v-container {
+  padding: 2rem;
 }
-.FahrtenFormular {
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  width: 100%;
-  height: 100%;
+
+.v-card {
+  border-radius: 1rem;
+  box-shadow: rgba(47, 96, 36, 0.274);
+}
+
+.v-autocomplete {
+  margin-bottom: 1rem;
+}
+
+.v-slider {
+  margin-top: 1rem;
+}
+
+.v-btn {
+  text-transform: none;
+}
+.button{
+  margin-left: 280px;
 }
 </style>

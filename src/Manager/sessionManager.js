@@ -1,7 +1,3 @@
-
-//SessionManager mit Punktnotation verwenden z.B: await SessionManager.funktion()
-
-
 import { supabase } from "@/Clients/supabaseClient";
 
 export const SessionManager = {
@@ -22,6 +18,7 @@ export const SessionManager = {
 
   // Abrufen des aktuellen Benutzers
   async getUser() {
+
     try {
       const session = await this.getCurrentSession();
       if (!session?.user) {
@@ -32,7 +29,7 @@ export const SessionManager = {
       // Benutzerinformationen aus der Sitzung
       const user = session.user;
 
-      // Metadaten abrufen, Benutzernamen
+      // Metadaten abrufen, z.B. Benutzernamen
       const username = user.user_metadata?.username || "Unbekannt";
 
       return {
@@ -62,7 +59,7 @@ export const SessionManager = {
     }
   },
 
-  // Benutzerabmeldung
+
   async logout() {
     try {
       const { error } = await supabase.auth.signOut();
@@ -84,4 +81,7 @@ export const SessionManager = {
       return { success: false, error: "Ein unerwarteter Fehler ist aufgetreten." };
     }
   },
+
+
+
 };

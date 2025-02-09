@@ -32,7 +32,7 @@ export default async function setupRealtime(store, router, updateFahrten) {
     .channel("new_request")
     .on("postgres_changes", { event: "INSERT", schema: "public", table: "anfragen" },
       (payload) => {
-        const { created_by, fahrt_id } = payload.new;
+        const { created_by } = payload.new;
 
         if (user.username === created_by) { // Überprüft, ob der aktuelle User der Fahrt-Ersteller ist
           store.showSnackbar({
@@ -40,8 +40,8 @@ export default async function setupRealtime(store, router, updateFahrten) {
             color: "info",
             action: () => {
               router.push({
-                name: "FahrtDetails",
-                params: { idFahrt: fahrt_id },
+                name: "/AnfragenVerwaltung",
+                
               });
             },
           });
@@ -61,7 +61,7 @@ export default async function setupRealtime(store, router, updateFahrten) {
     "postgres_changes",
     { event: "UPDATE", schema: "public", table: "anfragen" },
     (payload) => {
-      const { anfrager, status, start, fahrt_id, ziel } = payload.new;
+      const { anfrager, status, start, ziel } = payload.new;
       const previousStatus = payload.old?.status; // Vorheriger Status auslesen
 
       // Snackbar nur anzeigen, wenn der vorherige Status NICHT identisch mit dem neuen ist
@@ -83,10 +83,10 @@ export default async function setupRealtime(store, router, updateFahrten) {
                   name: "AlternativeFahrten",
                   query: { start, ziel },
                 });
-              } else {
+              } else{
                 router.push({
-                  name: "FahrtDetails",
-                  params: { idFahrt:  fahrt_id},
+                  name: "Anfragenverwaltung",
+                  
                 });
               }
             },
@@ -96,10 +96,38 @@ export default async function setupRealtime(store, router, updateFahrten) {
     }
   )
   .subscribe();
-  } catch (error) {
-    console.error("Fehler beim Abrufen des Benutzers:", error);
-  }
+
+
+ // Echtzeit-Updates für Einladungen
+ supabase
+ .channel("invitations")
+ .on(
+   "postgres_changes",
+   { event: "INSERT", schema: "public", table: "fahrten" },
+   (payload) => {
+     const { inviteUser, created_by, id_fahrt } = payload.new;
+     if (inviteUser && inviteUser.includes(user.username)) {
+       // Überprüfen, ob der aktuelle Benutzer eingeladen wurde
+       store.showSnackbar({
+         message: `Du wurdest von ${created_by} eingeladen!`,
+         color: "info",
+         action: () => {
+           router.push({
+             name: "Profil",
+             params: { username: created_by },
+             query: { highlightedFahrt: id_fahrt },
+           });
+         },
+       });
+     }
+   }
+ )
+ .subscribe();
+} catch (error) {
+  console.error("Fehler beim Abrufen des Benutzers:", error);
 }
+}
+
 
 
 /**

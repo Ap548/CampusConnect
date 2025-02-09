@@ -1,22 +1,12 @@
-
 <template>
   <v-container fluid>
     <v-row justify="center">
-      <v-col
-        cols="12"
-        sm="10"
-        md="8"
-        lg="6"
-      >
-        <v-card
-          elevation="4"
-          rounded="lg"
-        >
+      <v-col cols="12" sm="10" md="8" lg="6">
+        <v-card elevation="4" rounded="lg">
           <v-card-item>
             <v-card-title class="text-h5 primary--text">
-              <v-icon left>
-                mdi-message-text
-              </v-icon>Fahrten & Anfragen
+              <v-icon left>mdi-message-text</v-icon
+              >Fahrten & Anfragen
             </v-card-title>
             <v-card-subtitle>
               Hier können Sie die Anfragen für Ihre Fahrten verwalten.
@@ -24,12 +14,8 @@
           </v-card-item>
 
           <v-tabs v-model="tab">
-            <v-tab key="eigene">
-              Eigene Fahrten
-            </v-tab>
-            <v-tab key="gesendet">
-              Gesendete Anfragen
-            </v-tab>
+            <v-tab key="eigene"> Eigene Fahrten </v-tab>
+            <v-tab key="gesendet"> Gesendete Anfragen </v-tab>
           </v-tabs>
 
           <v-window v-model="tab">
@@ -48,14 +34,13 @@
                   >
                     <v-card-item>
                       <v-card-title class="text-h6">
-                        <v-icon left>
-                          mdi-map-marker
-                        </v-icon>{{ fahrt.start }} ➝ {{ fahrt.ziel }}
+                        <v-icon left>mdi-map-marker</v-icon>{{ fahrt.start }}
+                        ➝ {{ fahrt.ziel }}
                       </v-card-title>
                       <v-card-subtitle>
-                        <v-icon left>
-                          mdi-calendar
-                        </v-icon>{{ formatDate(fahrt.datum) }} um {{ formatTime(fahrt.zeit) }}
+                        <v-icon left>mdi-calendar</v-icon
+                        >{{ formatDate(fahrt.datum) }} um
+                        {{ formatTime(fahrt.zeit) }}
                       </v-card-subtitle>
 
                       <v-row
@@ -70,13 +55,14 @@
                               label
                               small
                             >
-                              {{ angenommeneAnfragen(fahrt) }} / {{ fahrt.anzahl_mitfahrer }}
+                              {{ angenommeneAnfragen(fahrt) }} /
+                              {{ fahrt.anzahl_mitfahrer }}
                             </v-chip>
                           </div>
                         </v-col>
                         <v-col cols="auto">
                           <v-chip
-                            :color="freiePlaetze(fahrt) > 0 ? 'success' : 'error'"
+                            :color="freiePlaetze(fahrt) > 0 ? 'rgba(38, 72, 30, 0.767) ' : 'rgba(168, 64, 43, 0.548)'"
                             label
                             small
                           >
@@ -108,38 +94,57 @@
                               {{ anfrage.anfrager }}
                             </a>
                           </v-list-item-title>
-                          <v-list-item-subtitle>
+                          <v-list-item-subtitle class="anfrage-status">
                             <v-chip
                               :color="statusColor(anfrage.status)"
                               label
                               small
+                              class="mr-2"
                             >
                               {{ anfrage.status }}
                             </v-chip>
+
+                            <v-btn
+                              v-if="anfrage.status !== 'ausstehend'"
+                              icon="mdi-pencil"
+                              small
+                              class="undo-btn"
+                              @click="resetAnfrageStatus(anfrage.id_anfrage, fahrt)"
+                            >
+
+                            </v-btn>
                           </v-list-item-subtitle>
                         </v-list-item-content>
                         <v-list-item-action>
                           <v-btn
-                            v-if="anfrage.status !== 'ausstehend'"
-                            icon
-                            color="info"
-                            @click="resetAnfrageStatus(anfrage.id_anfrage, fahrt)"
+                          class="edit-btn-1"
+                            v-if="anfrage.status === 'ausstehend'"
+                            icon="mdi-check"
+                            color="rgba(47, 96, 36, 0.274)"
+                            size="small"
+                            @click="
+                              updateAnfrageStatus(
+                                anfrage.id_anfrage,
+                                'akzeptiert',
+                                fahrt
+                              )
+                            "
                           >
-                            <v-icon>mdi-undo</v-icon>
+
                           </v-btn>
                           <v-btn
+                          class="edit-btn-2"
                             v-if="anfrage.status === 'ausstehend'"
-                            icon
-                            color="success"
-                            @click="updateAnfrageStatus(anfrage.id_anfrage, 'akzeptiert', fahrt)"
-                          >
-                            <v-icon>mdi-check</v-icon>
-                          </v-btn>
-                          <v-btn
-                            v-if="anfrage.status === 'ausstehend'"
-                            icon
-                            color="error"
-                            @click="updateAnfrageStatus(anfrage.id_anfrage, 'abgelehnt', fahrt)"
+                            icon="mdi-close"
+                            color="rgba(168, 64, 43, 0.548)"
+                            size="small"
+                            @click="
+                              updateAnfrageStatus(
+                                anfrage.id_anfrage,
+                                'abgelehnt',
+                                fahrt
+                              )
+                            "
                           >
                             <v-icon>mdi-close</v-icon>
                           </v-btn>
@@ -200,9 +205,9 @@
                   >
                     <v-card-item>
                       <v-card-title class="text-h6">
-                        <v-icon left>
-                          mdi-map-marker
-                        </v-icon>{{ anfrage.fahrt.start }} ➝ {{ anfrage.fahrt.ziel }}
+                        <v-icon left>mdi-map-marker</v-icon
+                        >{{ anfrage.fahrt.start }} ➝
+                        {{ anfrage.fahrt.ziel }}
                       </v-card-title>
                       <v-card-subtitle>
                         Anfragen von:
@@ -222,19 +227,15 @@
                         >
                           {{ anfrage.status }}
                         </v-chip>
-
-<!--neu-->
-                        <v-btn
-                          color="primary"
-                         @click.stop="openRatingDialog(anfrage)"
-                        >
-                          Bewertung abgeben
-                        </v-btn>
-
-
-
-
                       </v-card-text>
+                        <v-card-actions class="justify-end">
+                          <v-btn
+                            @click="openRatingDialog(anfrage)"
+                            :disabled="!canRateFahrt(anfrage)"
+                          >
+                            Bewertung abgeben
+                          </v-btn>
+                         </v-card-actions>
                     </v-card-item>
                   </v-card>
                 </v-list-item>
@@ -243,6 +244,7 @@
                 <v-alert
                   outlined
                   type="info"
+                  
                   icon="mdi-information-outline"
                 >
                   Keine gesendeten Anfragen.
@@ -254,21 +256,23 @@
       </v-col>
     </v-row>
 
-    <!--neu-->
+    <!-- Bewertung -->
     <v-dialog
       v-model="ratingDialog"
+      width="500"
     >
       <BewertungView
-        class="rating"
+        :fahrt-status="selectedAnfrage ? selectedAnfrage.status : ''"
+        :fahrt-datum="selectedAnfrage ? selectedAnfrage.fahrt.datum : ''"
         @rating-submitted="closeRatingDialog"
+        @close="closeRatingDialog"
       />
     </v-dialog>
-
   </v-container>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted } from "vue";
 import { supabase } from "@/Clients/supabaseClient";
 import gsap from "gsap";
 import { SessionManager } from "@/Manager/sessionManager";
@@ -283,6 +287,8 @@ const gesendeteAnfragen = ref([]);
 const loading = ref(false);
 const errorMessage = ref("");
 const user = await SessionManager.getUser();
+const ratingDialog = ref(false);
+const selectedAnfrage = ref(null);
 
 // Fahrten & Anfragen laden
 const loadFahrtenMitAnfragen = async () => {
@@ -479,32 +485,6 @@ const formatTime = (time) => {
   return time.slice(0, 5); // da Format hh:mm:ss ist
 };
 
-//  Navigiert zum Profil des Anfragers
-const goToUserProfile = async (username) => {
-    try {
-        const { data: userData, error: userError } = await supabase
-            .from('clients')
-            .select('username')
-            .eq('username', username)
-            .single();
-
-        if (userError) {
-            console.error("Error fetching user profile:", userError);
-
-            return;
-        }
-
-        if (userData) {
-            router.push({ path: `/profile/${username}` });
-        } else {
-            console.warn("User profile not found");
-
-        }
-    } catch (error) {
-        console.error("Unexpected error:", error);
-
-    }
-};
 
 const handleGesendeteAnfrageClick = (anfrage) => {
   if (anfrage.status === "abgelehnt") {
@@ -512,31 +492,28 @@ const handleGesendeteAnfrageClick = (anfrage) => {
       name: "alternativefahrten",
       query: { start: anfrage.fahrt.start, ziel: anfrage.fahrt.ziel },
     });
-  } else {
-    goToUserProfile(anfrage.fahrt.created_by);
   }
 };
 
-//  Öffnet das Standard-E-Mail-Programm
 const openEmail = (email) => {
   window.location.href = `mailto:${email}`;
 };
 
-// Bewertung
-const ratingDialog = ref(false);
+const canRateFahrt = (anfrage) => {
+  const isAkzeptiert = anfrage.status === 'akzeptiert';
+  const fahrtDatum = new Date(anfrage.fahrt.datum);
+  const istVergangen = fahrtDatum < new Date();
+  return isAkzeptiert && istVergangen;
+};
 
 const openRatingDialog = (anfrage) => {
-  const heute = new Date(); //aktuelles Datum
-  const fahrtDatum =new Date(anfrage.fahrt.datum); //Datum der Fahrt
-
-  if (anfrage.status === "akzeptiert" && fahrtDatum < heute) {
-    ratingDialog.value = true;
-  } else{
-    alert ("Die Fahrt wurde nicht akzeptiert oder hat noch nicht stattgefunden")
-  }
+  selectedAnfrage.value = anfrage;
+  ratingDialog.value = true;
 };
+
 const closeRatingDialog = () => {
-    ratingDialog.value = false;
+  ratingDialog.value = false;
+  selectedAnfrage.value = null;
 };
 
 onMounted(() => {
@@ -545,13 +522,42 @@ onMounted(() => {
   subscribeToAnfragenUpdates();
 });
 
-onUnmounted(() => {
-  supabase.channel("anfragen").unsubscribe();
-});
+// onUnmounted(() => {
+//   supabase.removeChannel("anfragen");
+// });
 </script>
 
 <style scoped>
-/* Modernes Design */
+.v-list-item-subtitle {
+  display: flex;
+  align-items: center;
+}
+
+.v-btn.ml-auto {
+  margin-left: auto;
+}
+
+.anfrage-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.edit-btn-1 {
+  margin-left: 330px;
+  margin-right:50px;
+  border-color:rgba(47, 96, 36, 0.274) ;
+  color:rgba(47, 96, 36, 0.58);
+  box-shadow: none !important;
+}
+
+.edit-btn-2 {
+  
+  border-color:rgba(47, 96, 36, 0.274) ;
+  color:rgba(47, 96, 36, 0.58);
+  box-shadow: none !important;
+}
+
 .v-card {
   transition: all 0.3s ease-in-out;
   border-radius: 12px;

@@ -43,14 +43,18 @@
               </h2>
               <v-rating
                 :model-value="profile.overallRating"
-                color="amber"
-                half-increments
+                density="comfortable"
+                empty-icon="mdi-car-outline"
+                full-icon="mdi-car"
+                half-icon="mdi-car-half"
+                half-increments=""
+                color="rgba(47, 96, 36, 0.613)"
                 readonly
-                size="small"
+                size="large"
               />
-              <p class="text-subtitle-1 mt-2">
+              <span class="text-subtitle-1 mt-2">
                 Gesamtbewertung: {{ profile.overallRating.toFixed(1) }}
-              </p>
+              </span>
               <v-textarea
                 v-model="profile.bio"
                 label="Über mich"
@@ -60,20 +64,20 @@
                 dense
                 @blur="updateBio"
               />
-              <v-btn
-                color="primary"
-                @click="openRatingDialog"
-              >
-                Bewertung abgeben
-              </v-btn>
             </v-col>
           </v-row>
         </v-card>
 
         <!-- Angelegte Fahrten -->
         <v-card class="mt-6 pa-4">
-          <h3 class="text-h5 mb-4">
+          <h3 class="text-h5 mb-4 d-flex align-center justify-space-between">
             Meine Fahrten
+            <v-btn
+              icon="mdi-plus"
+              small
+              color="rgba(47, 96, 36, 0.274)"
+              @click="isOverlayActive = true"
+            />
           </h3>
           <v-row>
             <v-col
@@ -118,27 +122,66 @@
       </v-col>
     </v-row>
 
+    <!-- Overlay für Fahrtenformular -->
+    <v-overlay
+      v-model="isOverlayActive"
+      class="align-center justify-center"
+      scroll-strategy="none"
+    >
+      <v-card
+
+        width="100%"
+        max-width="2500px"
+        class="overflow-y-auto"
+        style="max-height: 80vh"
+      >
+        <FahrtenFormular
+          @close="isOverlayActive = false"
+          @fahrten-aktualisieren="loadFahrten"
+        />
+      </v-card>
+    </v-overlay>
+
     <!-- Gemeinsamer Edit Dialog -->
     <v-dialog
       v-model="dialog"
-      width="auto"
+      width="600"
     >
       <v-card
         v-if="editedFahrt"
-        max-width="400"
+        max-width="5000"
       >
         <v-card-title>Fahrt bearbeiten</v-card-title>
+
         <v-card-text>
-          <v-text-field
+          <v-autocomplete
             v-model="editedFahrt.start"
-            label="Start"
+            :items="locations"
+            item-title="name"
+            item-value="name"
+            label="Startpunkt"
+            placeholder="Von"
+            prepend-inner-icon="mdi-map-marker-account-outline"
+            variant="outlined"
+            rounded="lg"
+            clearable
             required
           />
-          <v-text-field
+
+          <v-autocomplete
             v-model="editedFahrt.ziel"
+            :items="locations"
+            item-title="name"
+            item-value="name"
             label="Ziel"
+            placeholder="Bis"
+            prepend-inner-icon="mdi-map-marker-account-outline"
+            variant="outlined"
+            rounded="lg"
+            clearable
             required
           />
+
           <v-text-field
             v-model="editedFahrt.datum"
             label="Datum"
@@ -169,14 +212,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog
-      v-model="ratingDialog"
-    >
-      <BewertungView
-        class="rating"
-        @rating-submitted="closeRatingDialog"
-      />
-    </v-dialog>
   </v-container>
 </template>
 
@@ -187,7 +222,9 @@ import { supabase } from "@/Clients/supabaseClient";
 import { SessionManager } from "@/Manager/sessionManager";
 import setupRealtime from "@/services/realtimeListener";
 import { useRouter } from 'vue-router';
-import BewertungView from "./BewertungView.vue";
+
+import FahrtenFormular from "./AddFahrtView.vue";
+
 
 const router = useRouter();
 const profile = ref({
@@ -196,11 +233,28 @@ const profile = ref({
   overallRating: 0,
   bio: "",
 });
+
+// Verfügbare Orte
+const locations = [
+  { name: "Universität Bayreuth", id: 1 },
+  { name: "Campus Kulmbach", id: 2 },
+  { name: "ZOH", id: 3 },
+  { name: "Hauptbahnhof Bayreuth", id: 4 },
+  { name: "Bahnhof Kulmbach", id: 5 },
+  { name: "Studi am Roten Hügel", id: 6},
+  { name: "Studi Jakobsstraße", id:7 },
+  { name: "Studi Apart", id: 8},
+  { name: "Studi Storchennest", id: 9},
+  { name: "Uni Apart", id: 10},
+  { name: "Studiocomfort", id: 11}
+];
+
 const userFahrten = ref([]);
 const avatarFile = ref(null);
 const dialog = ref(false);
 const editedFahrt = ref(null);
-const ratingDialog = ref(false);
+
+const isOverlayActive = ref(false);
 
 const user = await SessionManager.getUser();
 
@@ -297,20 +351,13 @@ const formatDate = (date) => {
 };
 
 const formatTime = (time) => {
-  return time.slice(0, 5); // Assumes time is in HH:MM:SS format
+  return time.slice(0, 5); //  HH:MM:SS format
 };
 
 const openEditDialog = (fahrt) => {
   editedFahrt.value = { ...fahrt };
   dialog.value = true;
 };
-const openRatingDialog = () => {
-    ratingDialog.value = true;
-};
-const closeRatingDialog = () => {
-    ratingDialog.value = false;
-};
-
 
 const saveFahrt = async () => {
   if (!editedFahrt.value) return;
@@ -351,5 +398,9 @@ onMounted(() => {
 
 .rating{
   margin: auto;
+}
+
+.pa-4{
+  width: 100%;
 }
 </style>

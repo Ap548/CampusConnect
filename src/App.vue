@@ -70,7 +70,7 @@
       <v-snackbar
         :model-value="snackbar.show"
         :color="snackbar.color"
-        timeout="5000"
+        timeout="3000"
         rounded="pill"
         @update:model-value="store.setSnackbarVisibility"
       >

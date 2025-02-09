@@ -21,11 +21,25 @@ yarn install
 ```
 ### Installation
 
+```bash
 npm i gsap
+```
+
+```bash
 npm i pinia
+```
+
+```bash
 npm supabase
+```
+
+```bash
 npm install @supabase/supabase-js
+```
+
+```bash
 npm install vue-ruter@4
+```
 
 
 
